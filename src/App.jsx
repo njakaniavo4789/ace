@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Home, Briefcase, Building2, Phone, ArrowRight, X } from 'lucide-react';
+import { Briefcase, Building2, Phone, ArrowRight, X } from 'lucide-react';
 
 import logoISPM from './assets/logo_ispm.png';
 import logoAce from './assets/ace.png';
@@ -101,7 +101,6 @@ const ParticleField = () => {
 const NAV_ITEMS = [
   { icon: Building2, label: 'À propos', href: '#apropos' },
   { icon: Briefcase, label: 'Services', href: '#services' },
-  { icon: Home, label: 'Accueil', href: '#accueil' },
   { icon: Phone, label: 'Contact', href: '#contact' },
 ];
 
@@ -170,7 +169,7 @@ const HomePage = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-8 flex flex-col min-h-screen">
 
         <main className="flex-1 flex items-center justify-center relative">
-          <div className="relative w-full max-w-5xl group animate-float-slow">
+          <div className="relative w-full max-w-6xl group animate-float-slow">
 
             {/* Cercles décoratifs */}
             <div className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none">
@@ -185,7 +184,7 @@ const HomePage = () => {
                 <div className="absolute inset-0 rounded-[2rem] border-2 border-[#D4AF37]/20 animate-border-glow" />
               </div>
 
-              <div className="relative overflow-hidden rounded-[1.5rem] h-[500px] w-full">
+              <div className="relative overflow-hidden rounded-[1.5rem] h-[620px] w-full">
                 <img
                   src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=2500&auto=format&fit=crop"
                   alt="Bureau d'entreprise moderne"
