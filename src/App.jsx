@@ -4,7 +4,7 @@ import { Briefcase, Building2, Phone, ArrowRight, Plus, X, Menu, Sparkles } from
 import logoISPM from './assets/logo_ispm.png';
 import logoAce from './assets/ace.png';
 
-/* PARTICLES CANVAS — plus visible */
+/* PARTICLES CANVAS — plus visibles, taille modérée */
 const ParticleField = () => {
   const canvasRef = useRef(null);
   const mouse = useRef({ x: -9999, y: -9999 });
@@ -18,14 +18,14 @@ const ParticleField = () => {
       width = canvas.width = canvas.offsetWidth * window.devicePixelRatio;
       height = canvas.height = canvas.offsetHeight * window.devicePixelRatio;
       ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
-      // Densité augmentée (diviseur 9000 au lieu de 14000)
-      const count = Math.floor((canvas.offsetWidth * canvas.offsetHeight) / 9000);
+      // Densité légèrement augmentée
+      const count = Math.floor((canvas.offsetWidth * canvas.offsetHeight) / 8000);
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * canvas.offsetWidth,
         y: Math.random() * canvas.offsetHeight,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        r: Math.random() * 2 + 0.8,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 2.6 + 1.2, // Points plus gros mais raisonnables
       }));
     };
 
@@ -39,8 +39,8 @@ const ParticleField = () => {
         const dx = p.x - mouse.current.x;
         const dy = p.y - mouse.current.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 180) {
-          const force = (180 - dist) / 180;
+        if (dist < 190) {
+          const force = (190 - dist) / 190;
           p.vx += (dx / dist) * force * 0.05;
           p.vy += (dy / dist) * force * 0.05;
         }
@@ -51,25 +51,25 @@ const ParticleField = () => {
         p.x = Math.max(0, Math.min(w, p.x));
         p.y = Math.max(0, Math.min(h, p.y));
 
-        // Points plus opaques et plus gros
+        // Points plus visibles
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(184, 149, 74, 0.85)';
+        ctx.fillStyle = 'rgba(184, 149, 74, 0.95)';
         ctx.fill();
       }
 
-      // Liens plus visibles (distance + opacité + épaisseur)
+      // Liens plus visibles
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const a = particles[i], b = particles[j];
           const dx = a.x - b.x, dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 150) {
+          if (dist < 165) {
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(201, 169, 97, ${0.35 * (1 - dist / 150)})`;
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = `rgba(201, 169, 97, ${0.45 * (1 - dist / 165)})`;
+            ctx.lineWidth = 1.2;
             ctx.stroke();
           }
         }
@@ -353,8 +353,8 @@ const HomePage = () => {
         {/* Halos de fond — opacité réduite pour laisser voir les particules */}
         <div className="absolute inset-0 pointer-events-none">
           <ParticleField />
-          <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#f5edd8]/50 rounded-full blur-[150px] animate-pulse-glow" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-[#e0d8c4]/50 rounded-full blur-[150px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#f5edd8]/40 rounded-full blur-[150px] animate-pulse-glow" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-[#e0d8c4]/40 rounded-full blur-[150px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
           <div className="absolute top-[20%] right-[15%] w-[26vw] h-[26vw] bg-[#c9a961]/10 rounded-full blur-[130px] animate-pulse-glow" style={{ animationDelay: '3.5s' }} />
         </div>
 
