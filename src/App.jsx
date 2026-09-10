@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Briefcase, Building2, Phone, ArrowRight, X, Menu, Sparkles } from 'lucide-react';
 
 import logoISPM from './assets/logo_ispm.png';
-import logoAce from './assets/ace.png';
+import logoAce from './assets/logo.jpg';
 import handshakeBg from './assets/img _fond.jpg';
 
 /* ============================================= */
