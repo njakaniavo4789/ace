@@ -212,22 +212,22 @@ const NAV_ITEMS = [
 ];
 
 /* ============================================= */
-/* LOGO SANS CADRE                               */
+/* LOGO SANS CADRE — TAILLE AGRANDIE             */
 /* ============================================= */
 const PremiumLogo = ({ src, alt, label, delay = 0 }) => (
   <div className="group relative animate-fade-in flex flex-col items-center" style={{ animationDelay: `${delay}s` }}>
     <img
       src={src} alt={alt}
-      className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_12px_rgba(255,220,150,0.4)]"
+      className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-36 lg:h-36 object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(255,220,150,0.55)]"
     />
-    <div className="mt-2 flex flex-col items-center pointer-events-none">
+    <div className="mt-3 flex flex-col items-center pointer-events-none">
       <span
-        className="text-[10px] md:text-[11px] tracking-[0.35em] uppercase font-semibold transition-all duration-500 group-hover:tracking-[0.45em] text-amber-100"
+        className="text-xs sm:text-sm md:text-base lg:text-lg tracking-[0.35em] uppercase font-semibold transition-all duration-500 group-hover:tracking-[0.45em] text-amber-100"
         style={{ fontFamily: "'Playfair Display', serif", textShadow: '0 2px 12px rgba(0,0,0,0.6)' }}
       >
         {label}
       </span>
-      <span className="mt-1 h-[1.5px] w-0 group-hover:w-10 transition-all duration-500 rounded-full"
+      <span className="mt-1.5 h-[2px] w-0 group-hover:w-16 transition-all duration-500 rounded-full"
         style={{ background: 'linear-gradient(90deg, transparent, #f5d68a, transparent)' }}
       />
     </div>
@@ -383,7 +383,7 @@ const HomePage = () => {
         {/* ==== CONTENU ==== */}
         <div className="relative z-30 flex flex-col min-h-screen">
 
-          {/* LOGOS INVERSÉS */}
+          {/* LOGOS INVERSÉS ET AGRANDIS */}
           <div className="flex justify-between items-start px-4 sm:px-6 md:px-12 lg:px-16 pt-5 sm:pt-6 md:pt-8 shrink-0">
             <PremiumLogo src={logoAce} alt="ACE" label="ACE" delay={0.1} />
             <PremiumLogo src={logoISPM} alt="ISPM" label="ISPM" delay={0.2} />
