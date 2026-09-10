@@ -225,12 +225,23 @@ const PremiumLogo = ({ src, alt, label, delay = 0 }) => {
       className="group relative animate-fade-in flex flex-col items-center"
       style={{ animationDelay: `${delay}s` }}
     >
+      {/* Halo doré discret pour fondre le logo dans l'ambiance de la page */}
+      <div
+        className="absolute -inset-3 md:-inset-4 rounded-full pointer-events-none transition-opacity duration-500 group-hover:opacity-100"
+        style={{
+          background: 'radial-gradient(circle, rgba(201,169,97,0.22) 0%, rgba(212,184,120,0.08) 55%, transparent 75%)',
+          filter: 'blur(6px)',
+          opacity: 0.85,
+        }}
+      />
+
       <img
         src={src}
         alt={alt}
-        className="relative w-16 h-16 md:w-20 md:h-20 object-contain transition-transform duration-500 group-hover:scale-110"
+        className="relative w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 object-contain transition-transform duration-500 group-hover:scale-110"
         style={{
-          filter: 'drop-shadow(0 2px 6px rgba(201,169,97,0.25))',
+          filter: 'drop-shadow(0 2px 6px rgba(201,169,97,0.25)) sepia(0.12) saturate(1.05)',
+          mixBlendMode: 'multiply',
         }}
       />
 
@@ -346,58 +357,32 @@ const HomePage = () => {
     <div className="min-h-screen relative overflow-hidden font-sans text-gray-700" style={{ background: '#ffffff' }}>
       <style>{customStyles}</style>
 
-      <section id="accueil" className="relative min-h-screen w-full overflow-hidden" style={{ background: '#ffffff' }}>
+      <section id="accueil" className="relative min-h-screen w-full overflow-hidden flex flex-col" style={{ background: '#ffffff' }}>
 
         <div className="absolute inset-0 -z-10" style={{ background: '#ffffff' }} />
 
         {/* Halos de fond — opacité réduite pour laisser voir les particules */}
         <div className="absolute inset-0 pointer-events-none">
           <ParticleField />
-          <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#f5edd8]/40 rounded-full blur-[150px] animate-pulse-glow" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-[#e0d8c4]/40 rounded-full blur-[150px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] sm:w-[50vw] sm:h-[50vw] bg-[#f5edd8]/40 rounded-full blur-[150px] animate-pulse-glow" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] sm:w-[40vw] sm:h-[40vw] bg-[#e0d8c4]/40 rounded-full blur-[150px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
           <div className="absolute top-[20%] right-[15%] w-[26vw] h-[26vw] bg-[#c9a961]/10 rounded-full blur-[130px] animate-pulse-glow" style={{ animationDelay: '3.5s' }} />
         </div>
 
-        {/* ===== LOGOS CENTRÉS — SANS CADRE ===== */}
-        <div className="absolute top-6 md:top-8 inset-x-0 z-30 flex justify-center items-center gap-10 md:gap-20 px-6">
+        {/* ===== LOGOS AUX EXTREMITES — GAUCHE / DROITE ===== */}
+        {/* En flux normal (plus en absolute) : ne chevauche jamais le texte, même sur petits écrans */}
+        <div className="relative z-30 flex justify-between items-center px-4 sm:px-6 md:px-12 lg:px-16 pt-5 sm:pt-6 md:pt-8 shrink-0">
           <PremiumLogo src={logoISPM} alt="ISPM" label="ISPM" delay={0.1} />
-
-          <div className="relative hidden md:flex items-center gap-3">
-            <span
-              className="star-twinkle absolute -top-3 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
-              style={{ background: '#c9a961', animationDelay: '0.3s' }}
-            />
-            <span
-              className="star-twinkle absolute -bottom-3 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
-              style={{ background: '#d4b878', animationDelay: '1.1s' }}
-            />
-
-            <span
-              className="w-10 h-[1px]"
-              style={{ background: 'linear-gradient(90deg, transparent, rgba(201,169,97,0.8))' }}
-            />
-            <span
-              className="diamond-pulse w-1.5 h-1.5 rotate-45"
-              style={{
-                background: 'linear-gradient(135deg, #c9a961, #d4b878)',
-              }}
-            />
-            <span
-              className="w-10 h-[1px]"
-              style={{ background: 'linear-gradient(90deg, rgba(201,169,97,0.8), transparent)' }}
-            />
-          </div>
-
           <PremiumLogo src={logoAce} alt="ACE" label="ACE" delay={0.2} />
         </div>
 
-        {/* Illustration flottante */}
+        {/* Illustration flottante — visible uniquement à partir des tablettes pour ne pas encombrer le mobile */}
         <div
           className="hidden md:block absolute z-20 animate-float-card"
-          style={{ top: '14%', right: 'clamp(5rem, 10.5vw, 10rem)' }}
+          style={{ top: '14%', right: 'clamp(3rem, 8vw, 10rem)' }}
         >
           <div
-            className="w-48 md:w-56 lg:w-64"
+            className="w-40 md:w-56 lg:w-64"
             style={{ filter: 'drop-shadow(0 30px 55px rgba(201,169,97,0.3))' }}
             role="img"
             aria-label="Illustration du bâtiment de l'entreprise"
@@ -406,10 +391,10 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* Texte hero + bouton */}
-        <div className="absolute inset-x-0 bottom-0 z-20 px-6 md:px-12 lg:px-20 pb-20 md:pb-24 lg:pb-28">
-          <div className="max-w-2xl animate-fade-up delay-300">
-            <svg viewBox="0 0 120 16" className="w-24 h-4 mb-4" fill="none" aria-hidden="true">
+        {/* Texte hero + bouton — poussé en bas via mt-auto, jamais en absolute : s'adapte à toute hauteur d'écran */}
+        <div className="relative z-20 mt-auto px-4 sm:px-6 md:px-12 lg:px-20 pt-10 pb-28 sm:pb-24 md:pb-24 lg:pb-28">
+          <div className="max-w-xl lg:max-w-2xl animate-fade-up delay-300">
+            <svg viewBox="0 0 120 16" className="w-20 sm:w-24 h-4 mb-3 sm:mb-4" fill="none" aria-hidden="true">
               <defs>
                 <linearGradient id="flourishGrad" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0%" stopColor="#c9a961" />
@@ -420,11 +405,11 @@ const HomePage = () => {
               <circle cx="60" cy="8" r="3" fill="none" stroke="url(#flourishGrad)" strokeWidth="1" />
               <line x1="75" y1="8" x2="120" y2="8" stroke="url(#flourishGrad)" strokeWidth="1" />
             </svg>
-            <p className="text-[#b8954a] text-xs md:text-sm mb-3 tracking-[0.3em] uppercase font-semibold">
+            <p className="text-[#b8954a] text-[10px] sm:text-xs md:text-sm mb-2 sm:mb-3 tracking-[0.25em] sm:tracking-[0.3em] uppercase font-semibold">
               Excellence & Partenariat
             </p>
             <h1
-              className="text-4xl md:text-5xl lg:text-6xl text-gray-800 mb-4 leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-800 mb-3 sm:mb-4 leading-tight"
               style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}
             >
               L'Excellence au cœur de vos{" "}
@@ -432,30 +417,30 @@ const HomePage = () => {
                 Réussites
               </span>
             </h1>
-            <p className="text-gray-500 text-sm md:text-base leading-relaxed max-w-lg mb-8">
+            <p className="text-gray-500 text-sm md:text-base leading-relaxed max-w-lg mb-6 sm:mb-8">
               L'union de l'éducation (ISPM) et du service d'élite (Ace Services) pour transformer votre vision en réalité
             </p>
 
             {/* BOUTON DÉCOUVRIR L'ENTREPRISE — lumière atténuée */}
             <a
               href="#apropos"
-              className="btn-discover group relative inline-flex items-center gap-3 pl-7 pr-6 py-4 rounded-full overflow-hidden transition-all duration-500 hover:scale-[1.02] cursor-pointer"
+              className="btn-discover group relative inline-flex items-center gap-2 sm:gap-3 pl-5 sm:pl-7 pr-4 sm:pr-6 py-3 sm:py-4 rounded-full overflow-hidden transition-all duration-500 hover:scale-[1.02] cursor-pointer max-w-full"
               style={{
                 background: 'linear-gradient(135deg, #c9a961 0%, #d4b878 100%)',
                 boxShadow: '0 4px 14px rgba(201,169,97,0.25)',
               }}
             >
               <span className="shimmer-layer absolute inset-0 rounded-full pointer-events-none" />
-              <span className="relative flex items-center justify-center w-6 h-6">
+              <span className="relative flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 shrink-0">
                 <Sparkles size={16} style={{ color: '#ffffff' }} />
               </span>
               <span
-                className="relative text-sm md:text-base font-bold tracking-[0.08em] text-white"
+                className="relative text-xs sm:text-sm md:text-base font-bold tracking-[0.06em] sm:tracking-[0.08em] text-white whitespace-nowrap"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 Découvrir l'entreprise
               </span>
-              <span className="relative flex items-center justify-center w-7 h-7 rounded-full transition-all duration-500 group-hover:bg-white/15">
+              <span className="relative flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full transition-all duration-500 group-hover:bg-white/15 shrink-0">
                 <ArrowRight
                   size={16}
                   className="arrow-icon transition-transform duration-300"
@@ -625,7 +610,7 @@ const HomePage = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setActivePage(null)}>
           <div className="absolute inset-0 backdrop-blur-md" style={{ background: 'rgba(255,255,255,0.7)' }} />
           <div
-            className="relative w-full max-w-md rounded-3xl p-8 text-center animate-fade-up overflow-hidden"
+            className="relative w-full max-w-md rounded-3xl p-6 sm:p-8 text-center animate-fade-up overflow-hidden"
             style={{
               background: '#ffffff',
               backdropFilter: 'blur(20px)',
