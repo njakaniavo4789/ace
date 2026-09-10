@@ -117,94 +117,6 @@ const ParticleField = () => {
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" aria-hidden="true" />;
 };
 
-/* ============================================= */
-/* ILLUSTRATION BÂTIMENT (inchangée)             */
-/* ============================================= */
-const BuildingIllustration = () => {
-  const floors = 8, cols = 4;
-  const windows = [];
-  for (let r = 0; r < floors; r++) {
-    for (let c = 0; c < cols; c++) {
-      const roll = (r * cols + c) % 5;
-      const kind = roll === 0 ? 'dark' : roll <= 2 ? 'warm' : 'cool';
-      windows.push({
-        x: 38 + c * 33, y: 58 + r * 27, kind,
-        delay: ((r * cols + c) * 0.3) % 5,
-        duration: 4 + ((r + c) % 3),
-      });
-    }
-  }
-  return (
-    <svg viewBox="0 0 240 380" className="w-full h-full overflow-visible">
-      <defs>
-        <linearGradient id="towerBody" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#e8e2d4" /><stop offset="100%" stopColor="#c9a961" />
-        </linearGradient>
-        <linearGradient id="towerSide" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#b8954a" /><stop offset="100%" stopColor="#d4b878" />
-        </linearGradient>
-        <linearGradient id="wingBody" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#dcd6c8" /><stop offset="100%" stopColor="#b8954a" />
-        </linearGradient>
-        <linearGradient id="glassSheen" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="35%" stopColor="#ffffff" stopOpacity="0" />
-          <stop offset="50%" stopColor="#ffffff" stopOpacity="0.25" />
-          <stop offset="65%" stopColor="#ffffff" stopOpacity="0" />
-        </linearGradient>
-        <radialGradient id="groundShadow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#c9a961" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="#c9a961" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      <rect x="4" y="352" width="232" height="10" rx="2" fill="#e0d8c4" />
-      <ellipse cx="118" cy="360" rx="92" ry="13" fill="url(#groundShadow)" />
-      <g opacity="0.9">
-        <rect x="46" y="336" width="4" height="16" fill="#b8954a" />
-        <circle cx="48" cy="330" r="10" fill="#c9a961" />
-        <rect x="190" y="336" width="4" height="16" fill="#b8954a" />
-        <circle cx="192" cy="330" r="10" fill="#c9a961" />
-      </g>
-      <rect x="150" y="210" width="58" height="126" rx="3" fill="url(#wingBody)" />
-      <rect x="158" y="228" width="14" height="16" rx="1.5" fill="#f5edd8" className="window-glow" style={{ animationDelay: '1.1s', animationDuration: '5s' }} />
-      <rect x="184" y="228" width="14" height="16" rx="1.5" fill="#c9a961" opacity="0.7" className="window-glow" style={{ animationDelay: '2.4s', animationDuration: '4.5s' }} />
-      <rect x="158" y="256" width="14" height="16" rx="1.5" fill="#d4b878" />
-      <rect x="184" y="256" width="14" height="16" rx="1.5" fill="#f5edd8" className="window-glow" style={{ animationDelay: '3s', animationDuration: '4.8s' }} />
-      <rect x="20" y="46" width="146" height="290" rx="4" fill="url(#towerBody)" />
-      <rect x="166" y="46" width="16" height="290" fill="url(#towerSide)" />
-      <rect x="20" y="46" width="146" height="290" rx="4" fill="url(#glassSheen)" />
-      <rect x="34" y="30" width="30" height="16" rx="2" fill="#d4b878" />
-      <rect x="37" y="34" width="4" height="8" fill="#b8954a" />
-      <rect x="45" y="34" width="4" height="8" fill="#b8954a" />
-      <rect x="53" y="34" width="4" height="8" fill="#b8954a" />
-      <rect x="20" y="42" width="162" height="6" fill="#c9a961" opacity="0.4" />
-      <line x1="49" y1="30" x2="49" y2="8" stroke="#c9a961" strokeWidth="2" />
-      <circle cx="49" cy="8" r="2.5" fill="#d4b878" className="antenna-blink" />
-      <line x1="130" y1="46" x2="130" y2="16" stroke="#c9a961" strokeWidth="2" />
-      <path d="M130,16 L154,22 L130,28 Z" fill="#d4b878" className="flag-wave" />
-      {[112, 166, 220, 274].map((y, i) => (
-        <rect key={i} x="20" y={y} width="146" height="3" fill="#c9a961" opacity="0.25" />
-      ))}
-      {windows.map((w, i) => (
-        <rect key={i} x={w.x} y={w.y} width="15" height="19" rx="1.5"
-          fill={w.kind === 'warm' ? '#f5edd8' : w.kind === 'cool' ? '#c9a961' : '#d4b878'}
-          opacity={w.kind === 'dark' ? 1 : 0.95}
-          className={w.kind === 'dark' ? '' : 'window-glow'}
-          style={w.kind === 'dark' ? undefined : { animationDelay: `${w.delay}s`, animationDuration: `${w.duration}s` }}
-        />
-      ))}
-      <path d="M74,296 L132,296 L124,286 L82,286 Z" fill="#c9a961" opacity="0.85" />
-      <line x1="80" y1="296" x2="80" y2="306" stroke="#c9a961" strokeWidth="1.5" />
-      <line x1="126" y1="296" x2="126" y2="306" stroke="#c9a961" strokeWidth="1.5" />
-      <rect x="82" y="300" width="42" height="32" rx="2" fill="#d4b878" opacity="0.6" />
-      <line x1="103" y1="300" x2="103" y2="332" stroke="#b8954a" strokeWidth="1.5" />
-      <g className="birds-fly" fill="none" stroke="#c9a961" strokeWidth="1.6" strokeLinecap="round" opacity="0.7">
-        <path d="M4,20 q5,-6 10,0 q5,-6 10,0" />
-        <path d="M20,34 q4,-5 8,0 q4,-5 8,0" />
-      </g>
-    </svg>
-  );
-};
-
 const NAV_ITEMS = [
   { icon: Building2, label: 'À propos', href: '#apropos' },
   { icon: Briefcase, label: 'Services', href: '#services' },
@@ -248,19 +160,9 @@ const HomePage = () => {
     @keyframes fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
     @keyframes pulse-glow { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.55; transform: scale(1.1); } }
-    @keyframes float-card { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-18px) rotate(1deg); } }
-    @keyframes window-glow { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-    @keyframes antenna-blink { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
     @keyframes nav-slide-in { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
     @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
     @keyframes arrow-bounce { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
-    @keyframes birds-drift {
-      0% { transform: translate(0, 0); opacity: 0.7; }
-      45% { transform: translate(26px, -10px); opacity: 0.9; }
-      55% { transform: translate(26px, -10px); opacity: 0.9; }
-      100% { transform: translate(0, 0); opacity: 0.7; }
-    }
-    @keyframes flag-wave { 0%, 100% { transform: scaleX(1) skewY(0deg); } 50% { transform: scaleX(0.92) skewY(-4deg); } }
     @keyframes bg-zoom {
       0% { transform: scale(1.05); }
       100% { transform: scale(1.15); }
@@ -274,15 +176,9 @@ const HomePage = () => {
       50% { transform: translateY(-10px); }
     }
 
-    .window-glow { animation-name: window-glow; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
-    .antenna-blink { animation: antenna-blink 1.6s ease-in-out infinite; }
-    .birds-fly { animation: birds-drift 9s ease-in-out infinite; }
-    .flag-wave { animation: flag-wave 2.2s ease-in-out infinite; transform-origin: 130px 22px; }
-
     .animate-fade-up { animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; }
     .animate-fade-in { animation: fade-in 0.8s ease forwards; opacity: 0; }
     .animate-pulse-glow { animation: pulse-glow 6s ease-in-out infinite; }
-    .animate-float-card { animation: float-card 7s ease-in-out infinite; }
     .animate-nav-slide { animation: nav-slide-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; }
     .animate-float-slow { animation: float-slow 5s ease-in-out infinite; }
 
@@ -387,22 +283,6 @@ const HomePage = () => {
           <div className="flex justify-between items-start px-4 sm:px-6 md:px-12 lg:px-16 pt-5 sm:pt-6 md:pt-8 shrink-0">
             <PremiumLogo src={logoAce} alt="ACE" label="ACE" delay={0.1} />
             <PremiumLogo src={logoISPM} alt="ISPM" label="ISPM" delay={0.2} />
-          </div>
-
-          {/* Illustration flottante */}
-          <div
-            className="hidden md:block absolute z-20 animate-float-card"
-            style={{ top: '16%', right: 'clamp(3rem, 8vw, 10rem)' }}
-          >
-            <div
-              className="w-40 md:w-56 lg:w-64 relative"
-              style={{ filter: 'drop-shadow(0 30px 60px rgba(201,169,97,0.5)) drop-shadow(0 0 30px rgba(255,220,150,0.3))' }}
-              role="img"
-              aria-label="Illustration du bâtiment"
-            >
-              <div className="absolute inset-0 bg-amber-400/20 blur-[60px] rounded-full" />
-              <BuildingIllustration />
-            </div>
           </div>
 
           {/* HERO TEXTE */}
