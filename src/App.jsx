@@ -6,6 +6,7 @@ import logoAce from './assets/logo.jpg';
 import handshakeBg from './assets/img _fond.jpg';
 import AboutPage from './AboutPage';
 import ProcessPage from './ProcessPage';
+import ServicesPage from './ServicesPage';
 
 /* ============================================= */
 /* SPOTLIGHT QUI SUIT LA SOURIS                 */
@@ -865,6 +866,10 @@ const HomePage = () => {
           ) : activePage === 'Processus' ? (
             <div className="fixed inset-0 z-50 overflow-y-auto">
               <ProcessPage onBack={() => setActivePage(null)} />
+            </div>
+          ) : activePage === 'Services' ? (
+            <div className="fixed inset-0 z-50 overflow-y-auto">
+              <ServicesPage onBack={() => setActivePage(null)} />
             </div>
           ) : (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setActivePage(null)}>
