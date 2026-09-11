@@ -365,6 +365,7 @@ const HomePage = () => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [initialStep, setInitialStep] = useState(0);
   const [initialService, setInitialService] = useState(0);
+  const [reserveService, setReserveService] = useState(null);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -870,6 +871,7 @@ const HomePage = () => {
                   setInitialStep(service);
                   setActivePage('Processus');
                 }}
+                onReserve={(service) => setReserveService(service)}
                 initialService={initialService}
               />
             </div>
@@ -924,6 +926,72 @@ const HomePage = () => {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* MODAL RÉSERVATION */}
+      {reserveService && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" onClick={() => setReserveService(null)}>
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-md" />
+          <div
+            className="relative w-full max-w-md bg-white rounded-3xl p-8 sm:p-10 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setReserveService(null)}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-100 transition-all cursor-pointer"
+            >
+              ✕
+            </button>
+
+            <div className="mb-6">
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#c9a961] mb-2">Réservation</p>
+              <h3 className="text-2xl font-black text-gray-900">{reserveService.title}</h3>
+              <p className="text-sm text-gray-500 mt-1">{reserveService.models[1].name} — {reserveService.models[1].price}</p>
+            </div>
+
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const form = e.target;
+              const nom = form.elements.Nom.value;
+              const date = form.elements.Date.value;
+              const service = reserveService.title;
+              const formule = `${reserveService.models[1].name} — ${reserveService.models[1].price}`;
+              const subject = encodeURIComponent(`Réservation - ${service}`);
+              const body = encodeURIComponent(
+                `Bonjour,\n\nJe souhaite réserver ce service :\n\nNom : ${nom}\nService : ${service}\nFormule : ${formule}\nDate souhaitée : ${date}\n\nMerci.`
+              );
+              window.location.href = `mailto:njakaniavo5@gmail.com?subject=${subject}&body=${body}`;
+            }}>
+              <div className="mb-5">
+                <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Votre nom *</label>
+                <input
+                  type="text"
+                  name="Nom"
+                  required
+                  placeholder="Ex: Jean Dupont"
+                  className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 text-sm font-medium placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c9a961]/50 focus:border-[#c9a961] transition-all"
+                />
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Date souhaitée *</label>
+                <input
+                  type="date"
+                  name="Date"
+                  required
+                  className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#c9a961]/50 focus:border-[#c9a961] transition-all"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-[#c9a961] hover:bg-[#b8954a] text-white py-4 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 cursor-pointer"
+              >
+                Réserver maintenant
+              </button>
+            </form>
+          </div>
         </div>
       )}
     </div>

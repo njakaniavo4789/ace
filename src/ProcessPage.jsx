@@ -155,29 +155,28 @@ export default function ProcessPage({ onBack, onGoToService, initialStep = 0 }) 
         style={{ scaleX }}
       />
 
+      <nav className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative z-30">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex items-center gap-4"
+        >
+          <button
+            onClick={onBack}
+            className="flex items-center gap-2 text-sm text-gray-500 hover:text-black transition-colors cursor-pointer"
+          >
+            <ArrowLeft size={18} />
+            <span className="hidden sm:inline">Retour</span>
+          </button>
+          <span className="text-xl md:text-2xl font-black tracking-tighter uppercase">Ace Services.</span>
+        </motion.div>
+      </nav>
+
       <motion.header
         ref={headerRef}
         style={{ y: yHeader, opacity: opacityHeader }}
-        className="max-w-7xl mx-auto px-6 pt-16 pb-8 md:pt-24 md:pb-10 relative"
+        className="max-w-7xl mx-auto px-6 pt-16 pb-8 md:pt-20 md:pb-10 relative"
       >
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)] pointer-events-none" />
-
-        <div className="relative flex justify-between items-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-4"
-          >
-            <button
-              onClick={onBack}
-              className="flex items-center gap-2 text-sm text-gray-500 hover:text-black transition-colors cursor-pointer"
-            >
-              <ArrowLeft size={18} />
-              <span className="hidden sm:inline">Retour</span>
-            </button>
-            <span className="text-2xl font-black tracking-tighter uppercase">Ace Services.</span>
-          </motion.div>
-        </div>
 
         <div className="relative">
           <AnimatedText
@@ -188,7 +187,7 @@ export default function ProcessPage({ onBack, onGoToService, initialStep = 0 }) 
       </motion.header>
 
       {/* Sélecteur de service - décalé vers le bas */}
-      <section className="max-w-[1400px] mx-auto px-4 pt-8 md:pt-16 pb-12 relative z-20">
+      <section className="max-w-[1400px] mx-auto px-4 pt-4 md:pt-8 pb-12 relative z-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
