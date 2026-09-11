@@ -12,7 +12,7 @@ const steps = [
     image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2664&auto=format&fit=crop",
     icon: <Lightbulb className="w-8 h-8" />,
     color: "bg-[#F3F4F6]",
-    accentColor: "text-gray-900",
+    accentColor: "text-gray-800",
     etapes: [
       { num: "01", titre: "Échange initial", desc: "Nous discutons avec vous pour comprendre votre idée, vos objectifs et les caractéristiques de votre projet." },
       { num: "02", titre: "Collecte des informations", desc: "Nous réunissons les informations nécessaires sur votre secteur, votre environnement et les ressources nécessaires." },
@@ -28,7 +28,7 @@ const steps = [
     description: "Identifiez votre clientèle cible, ses besoins et analysez la concurrence.",
     image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2670&auto=format&fit=crop",
     icon: <Target className="w-8 h-8" />,
-    color: "bg-[#D32F2F]",
+    color: "bg-[#c9a961]",
     accentColor: "text-white",
     etapes: [
       { num: "01", titre: "Définition de la cible", desc: "Nous identifions les consommateurs auxquels votre produit ou service s'adresse." },
@@ -46,7 +46,7 @@ const steps = [
     description: "Prévisions chiffrées pour prendre des décisions financières éclairées.",
     image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2670&auto=format&fit=crop",
     icon: <BarChart3 className="w-8 h-8" />,
-    color: "bg-[#111827]",
+    color: "bg-[#2a2a2a]",
     accentColor: "text-white",
     etapes: [
       { num: "01", titre: "Identification des besoins", desc: "Nous recensons les dépenses nécessaires à la création et au lancement de votre activité." },
@@ -65,7 +65,7 @@ const steps = [
     image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=2670&auto=format&fit=crop",
     icon: <Building2 className="w-8 h-8" />,
     color: "bg-[#F3F4F6]",
-    accentColor: "text-gray-900",
+    accentColor: "text-gray-800",
     etapes: [
       { num: "01", titre: "Analyse de votre projet", desc: "Nous prenons en compte votre activité, le nombre d'associés, le capital disponible et vos objectifs." },
       { num: "02", titre: "Orientation juridique", desc: "Nous vous aidons à comprendre les différentes formes juridiques pouvant correspondre à votre projet." },
@@ -149,9 +149,9 @@ export default function ProcessPage({ onBack }) {
   const currentService = steps[activeStep];
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-900 selection:bg-red-500 selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-white font-sans text-gray-800 selection:bg-[#c9a961] selection:text-white overflow-x-hidden">
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-red-600 origin-left z-[100]"
+        className="fixed top-0 left-0 right-0 h-1 bg-[#c9a961] origin-left z-[100]"
         style={{ scaleX }}
       />
 
@@ -176,18 +176,6 @@ export default function ProcessPage({ onBack }) {
               <span className="hidden sm:inline">Retour</span>
             </button>
             <span className="text-2xl font-black tracking-tighter uppercase">Ace Services.</span>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-500"
-          >
-            <a href="#" onClick={onBack} className="hover:text-black transition-colors">Accueil</a>
-            <a href="#" className="text-red-600 relative">
-              Notre Processus
-              <motion.span layoutId="underline" className="absolute -bottom-2 left-0 right-0 h-[2px] bg-red-600" />
-            </a>
-            <a href="#" className="hover:text-black transition-colors">Contact</a>
           </motion.div>
         </div>
 
@@ -214,8 +202,8 @@ export default function ProcessPage({ onBack }) {
               onClick={() => setActiveStep(index)}
               className={`px-4 py-2 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider transition-all duration-300 border-2 cursor-pointer
                 ${activeStep === index
-                  ? 'bg-red-600 text-white border-red-600 shadow-lg shadow-red-600/30'
-                  : 'bg-white text-gray-500 border-gray-200 hover:border-red-300 hover:text-red-600'
+                  ? 'bg-[#c9a961] text-white border-[#c9a961] shadow-lg shadow-[#c9a961]/30'
+                  : 'bg-white text-gray-500 border-gray-200 hover:border-[#d4b878] hover:text-[#c9a961]'
                 }`}
             >
               {step.id} — {step.title}
@@ -254,7 +242,7 @@ export default function ProcessPage({ onBack }) {
                   <h2 className="text-3xl md:text-4xl font-black uppercase leading-tight mb-4">
                     {currentService.title}
                   </h2>
-                  <p className="text-sm md:text-base opacity-80 font-medium leading-relaxed">
+                  <p className="text-base md:text-lg opacity-80 font-medium leading-relaxed">
                     {currentService.description}
                   </p>
                 </div>
@@ -278,7 +266,7 @@ export default function ProcessPage({ onBack }) {
             {/* Étapes "Comment ça marche" */}
             <div className="lg:col-span-7">
               <div className="mb-6 flex items-center gap-3">
-                <div className="h-[2px] w-12 bg-red-600" />
+                <div className="h-[2px] w-12 bg-[#c9a961]" />
                 <h3 className="text-sm font-bold uppercase tracking-widest text-gray-500">Comment ça marche ?</h3>
               </div>
 
@@ -289,23 +277,23 @@ export default function ProcessPage({ onBack }) {
                     initial={{ opacity: 0, x: 30 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="group relative bg-white rounded-2xl p-5 md:p-6 border border-gray-100 hover:border-red-200 hover:shadow-lg hover:shadow-red-600/5 transition-all duration-300"
+                    className="group relative bg-white rounded-2xl p-5 md:p-6 border border-gray-100 hover:border-[#e0d5c0] hover:shadow-lg hover:shadow-[#c9a961]/5 transition-all duration-300"
                   >
                     <div className="flex items-start gap-4 md:gap-6">
-                      <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gray-50 group-hover:bg-red-600 flex items-center justify-center transition-colors duration-300">
+                      <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gray-50 group-hover:bg-[#c9a961] flex items-center justify-center transition-colors duration-300">
                         <span className="text-sm md:text-base font-black text-gray-900 group-hover:text-white transition-colors duration-300">
                           {etape.num}
                         </span>
                       </div>
                       <div className="flex-1 pt-0.5">
-                        <h4 className="text-base md:text-lg font-black uppercase tracking-tight mb-1 group-hover:text-red-600 transition-colors duration-300">
+                        <h4 className="text-base md:text-lg font-black uppercase tracking-tight mb-1 group-hover:text-[#c9a961] transition-colors duration-300">
                           {etape.titre}
                         </h4>
-                        <p className="text-sm text-gray-500 leading-relaxed">
+                        <p className="text-base text-gray-500 leading-relaxed">
                           {etape.desc}
                         </p>
                       </div>
-                      <ArrowRight className="flex-shrink-0 w-5 h-5 text-gray-300 group-hover:text-red-600 group-hover:translate-x-1 transition-all duration-300 mt-1" />
+                      <ArrowRight className="flex-shrink-0 w-5 h-5 text-gray-300 group-hover:text-[#c9a961] group-hover:translate-x-1 transition-all duration-300 mt-1" />
                     </div>
 
                     {i < currentService.etapes.length - 1 && (
@@ -317,38 +305,6 @@ export default function ProcessPage({ onBack }) {
             </div>
           </motion.div>
         </AnimatePresence>
-      </section>
-
-      <section className="relative bg-gray-900 text-white py-24 px-6 text-center overflow-hidden">
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-red-600/20 blur-3xl"
-        />
-
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="relative z-10"
-        >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="inline-block mb-6"
-          >
-            <Sparkles className="w-12 h-12 text-red-500" />
-          </motion.div>
-
-          <h2 className="text-4xl md:text-6xl font-black uppercase mb-8">
-            Prêt à démarrer ?
-          </h2>
-
-          <MagneticButton className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest transition-all flex items-center gap-3 mx-auto shadow-lg shadow-red-600/50 cursor-pointer">
-            Réserver un appel <ArrowRight className="w-5 h-5" />
-          </MagneticButton>
-        </motion.div>
       </section>
     </div>
   );

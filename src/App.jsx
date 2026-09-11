@@ -165,7 +165,6 @@ const LightSweep = () => (
 );
 
 const NAV_ITEMS = [
-  { icon: Building2, label: 'À propos', href: '#apropos' },
   { icon: Briefcase, label: 'Services', href: '#services' },
   { icon: Settings, label: 'Processus', href: '#processus' },
   { icon: Phone, label: 'Contact', href: '#contact' },
@@ -177,7 +176,7 @@ const NAV_ITEMS = [
 const CONTACT_INFO = [
   { icon: Phone, label: 'Téléphone', value: '+261 20 22 123 45', href: 'tel:+261202212345', copyable: true },
   { icon: MapPin, label: 'Adresse', value: 'Galaxy Andraharo, Antananarivo', href: null, copyable: true },
-  { icon: Globe, label: 'Email', value: 'acesservices@gmail.com', href: 'mailto:acesservices@gmail.com', copyable: true },
+  { icon: Globe, label: 'Email', value: 'aceservices@gmail.com', href: 'mailto:aceservices@gmail.com', copyable: true },
 ];
 
 /* ============================================= */
@@ -225,48 +224,36 @@ const ContactPanel = ({ onClose }) => {
     <div
       className="contact-frame relative w-full max-w-4xl rounded-[32px] animate-fade-up"
       style={{
-        background: 'linear-gradient(160deg, rgba(24,19,11,0.98) 0%, rgba(11,8,5,0.99) 55%, rgba(22,17,10,0.98) 100%)',
+        background: 'linear-gradient(160deg, rgba(255,255,255,0.98) 0%, rgba(245,245,240,0.99) 55%, rgba(255,255,255,0.98) 100%)',
         backdropFilter: 'blur(28px)',
-        boxShadow: '0 50px 130px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,220,150,0.06)',
+        boxShadow: '0 50px 130px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8)',
       }}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="absolute inset-0 opacity-[0.35] pointer-events-none rounded-[32px] overflow-hidden">
-        <ParticleField />
-      </div>
-      <Spotlight />
-      <div className="absolute -top-28 -right-16 w-72 h-72 sm:w-96 sm:h-96 rounded-full blur-[110px] pointer-events-none" style={{ background: 'rgba(245,214,138,0.16)' }} />
-      <div className="absolute -bottom-28 -left-16 w-72 h-72 sm:w-96 sm:h-96 rounded-full blur-[110px] pointer-events-none" style={{ background: 'rgba(201,169,97,0.13)' }} />
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.045] mix-blend-overlay rounded-[32px]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-        }}
-      />
-      <div className="absolute top-0 left-0 right-0 h-[2px] z-10" style={{ background: 'linear-gradient(90deg, transparent, #f5d68a, transparent)' }} />
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] z-10" style={{ background: 'linear-gradient(90deg, transparent, rgba(245,214,138,0.4), transparent)' }} />
+      <div className="absolute top-0 left-0 right-0 h-[2px] z-10" style={{ background: 'linear-gradient(90deg, transparent, #c9a961, transparent)' }} />
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] z-10" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,169,97,0.4), transparent)' }} />
 
       <button
         onClick={onClose}
         className="absolute top-5 right-5 sm:top-7 sm:right-7 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all duration-400 hover:scale-110 hover:rotate-90 cursor-pointer"
-        style={{ background: 'rgba(245,214,138,0.1)', border: '1px solid rgba(245,214,138,0.3)' }}
+        style={{ background: 'rgba(201,169,97,0.1)', border: '1px solid rgba(201,169,97,0.3)' }}
         aria-label="Fermer"
       >
-        <X size={16} style={{ color: '#f5d68a' }} />
+        <X size={16} style={{ color: '#c9a961' }} />
       </button>
 
       <div className="relative z-10 grid md:grid-cols-[0.95fr_1.15fr] gap-10 md:gap-6 p-8 sm:p-12 md:p-16">
 
         <div className="flex flex-col justify-center animate-fade-up delay-100">
-          <p className="text-amber-200/80 text-[10px] sm:text-xs mb-4 tracking-[0.4em] uppercase font-semibold">
+          <p className="text-[#c9a961] text-[10px] sm:text-xs mb-4 tracking-[0.4em] uppercase font-semibold">
             Parlons-en
           </p>
 
           <svg viewBox="0 0 120 16" className="w-16 sm:w-20 h-4 mb-5" fill="none" aria-hidden="true">
             <defs>
               <linearGradient id="contactFlourish" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#f5d68a" />
-                <stop offset="100%" stopColor="#c9a961" />
+                <stop offset="0%" stopColor="#c9a961" />
+                <stop offset="100%" stopColor="#d4b878" />
               </linearGradient>
             </defs>
             <line x1="0" y1="8" x2="45" y2="8" stroke="url(#contactFlourish)" strokeWidth="1" />
@@ -278,11 +265,10 @@ const ContactPanel = ({ onClose }) => {
             className="font-display text-5xl sm:text-6xl md:text-7xl leading-[0.95] mb-6"
             style={{
               fontWeight: 700,
-              background: 'linear-gradient(120deg, #ffffff 0%, #f5d68a 55%, #c9a961 100%)',
+              background: 'linear-gradient(120deg, #2a2a2a 0%, #c9a961 55%, #d4b878 100%)',
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
               color: 'transparent',
-              textShadow: '0 4px 30px rgba(0,0,0,0.5)',
             }}
           >
             Contact
@@ -297,14 +283,14 @@ const ContactPanel = ({ onClose }) => {
                 key={label}
                 className="contact-card group relative rounded-2xl px-5 py-5 sm:px-6 sm:py-6 flex items-center gap-4 sm:gap-5 overflow-hidden transition-all duration-400 hover:-translate-y-0.5 animate-fade-up"
                 style={{
-                  background: 'rgba(245,214,138,0.045)',
-                  border: '1px solid rgba(245,214,138,0.16)',
+                  background: 'rgba(201,169,97,0.06)',
+                  border: '1px solid rgba(201,169,97,0.2)',
                   animationDelay: `${0.2 + i * 0.1}s`,
                 }}
               >
                 <span
                   className="absolute -right-1 top-1/2 -translate-y-1/2 font-display text-5xl sm:text-6xl select-none pointer-events-none transition-opacity duration-400 group-hover:opacity-100"
-                  style={{ color: 'rgba(245,214,138,0.07)', opacity: 0.6 }}
+                  style={{ color: 'rgba(201,169,97,0.08)', opacity: 0.6 }}
                 >
                   0{i + 1}
                 </span>
@@ -312,15 +298,15 @@ const ContactPanel = ({ onClose }) => {
                 <span
                   className="shrink-0 relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl transition-transform duration-400 group-hover:scale-105 group-hover:rotate-3"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(245,214,138,0.2), rgba(201,169,97,0.08))',
-                    border: '1px solid rgba(245,214,138,0.35)',
+                    background: 'linear-gradient(135deg, rgba(201,169,97,0.15), rgba(212,184,120,0.08))',
+                    border: '1px solid rgba(201,169,97,0.3)',
                   }}
                 >
-                  <Icon size={20} style={{ color: '#f5d68a' }} />
+                  <Icon size={20} style={{ color: '#c9a961' }} />
                 </span>
 
                 <span className="relative flex flex-col min-w-0">
-                  <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-amber-200/55 font-semibold mb-1">
+                  <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-gray-400 font-semibold mb-1">
                     {label}
                   </span>
                   {href ? (
@@ -328,12 +314,12 @@ const ContactPanel = ({ onClose }) => {
                       href={href}
                       target={isExternal ? '_blank' : undefined}
                       rel={isExternal ? 'noopener noreferrer' : undefined}
-                      className="text-base sm:text-lg md:text-xl font-display font-semibold text-white group-hover:text-amber-100 transition-colors duration-300 truncate"
+                      className="text-base sm:text-lg md:text-xl font-display font-semibold text-gray-800 group-hover:text-[#c9a961] transition-colors duration-300 truncate"
                     >
                       {value}
                     </a>
                   ) : (
-                    <span className="text-base sm:text-lg md:text-xl font-display font-semibold text-white truncate">
+                    <span className="text-base sm:text-lg md:text-xl font-display font-semibold text-gray-800 truncate">
                       {value}
                     </span>
                   )}
@@ -343,13 +329,13 @@ const ContactPanel = ({ onClose }) => {
                   <button
                     onClick={() => handleCopy(value, i)}
                     className="relative ml-auto shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer"
-                    style={{ background: 'rgba(245,214,138,0.08)', border: '1px solid rgba(245,214,138,0.25)' }}
+                    style={{ background: 'rgba(201,169,97,0.1)', border: '1px solid rgba(201,169,97,0.25)' }}
                     aria-label={`Copier : ${label}`}
                   >
                     {copiedIndex === i ? (
-                      <Check size={14} style={{ color: '#4ade80' }} />
+                      <Check size={14} style={{ color: '#22c55e' }} />
                     ) : (
-                      <Copy size={14} style={{ color: '#f5d68a' }} />
+                      <Copy size={14} style={{ color: '#c9a961' }} />
                     )}
                   </button>
                 )}
@@ -357,7 +343,7 @@ const ContactPanel = ({ onClose }) => {
                 {isExternal && (
                   <ArrowRight
                     size={16}
-                    className="ml-auto shrink-0 text-amber-300/40 group-hover:text-amber-300/90 transition-all duration-300 group-hover:translate-x-1"
+                    className="ml-auto shrink-0 text-gray-300 group-hover:text-[#c9a961] transition-all duration-300 group-hover:translate-x-1"
                   />
                 )}
               </div>
@@ -688,8 +674,8 @@ const HomePage = () => {
                 L'union de l'éducation (ISPM) et du service d'élite (Ace Services) pour transformer votre vision en réalité.
               </p>
 
-              <a
-                href="#apropos"
+              <button
+                onClick={() => setActivePage('À propos')}
                 className="btn-discover group relative inline-flex items-center gap-2 sm:gap-3 pl-6 sm:pl-8 pr-5 sm:pr-6 py-4 sm:py-5 rounded-full overflow-hidden transition-all duration-500 hover:scale-[1.03] cursor-pointer max-w-full"
                 style={{
                   background: 'linear-gradient(135deg, #f5d68a 0%, #c9a961 50%, #b8954a 100%)',
@@ -709,7 +695,7 @@ const HomePage = () => {
                 <span className="relative flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full transition-all duration-500 group-hover:bg-white/20 shrink-0">
                   <ArrowRight size={18} className="arrow-icon transition-transform duration-300" style={{ color: '#ffffff' }} />
                 </span>
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -856,7 +842,7 @@ const HomePage = () => {
         <div className="fixed inset-0 z-50">
           {activePage === 'Contact' ? (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setActivePage(null)}>
-              <div className="absolute inset-0 backdrop-blur-xl" style={{ background: 'rgba(10, 8, 5, 0.7)' }} />
+              <div className="absolute inset-0 backdrop-blur-xl" style={{ background: 'rgba(0, 0, 0, 0.4)' }} />
               <ContactPanel onClose={() => setActivePage(null)} />
             </div>
           ) : activePage === 'À propos' ? (
