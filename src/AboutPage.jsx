@@ -54,7 +54,7 @@ export default function AboutPage({ onBack }) {
           <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 group-hover:border-white/50 transition-colors">
             <ArrowLeft size={16} />
           </span>
-          Retour a l accueil
+          Retour a l'accueil
         </button>
       </div>
 
@@ -133,7 +133,7 @@ export default function AboutPage({ onBack }) {
 
       <section id="contact-about" className="relative overflow-hidden px-6 md:px-12 py-28 text-center border-t border-white/10">
         <div className="pointer-events-none absolute -bottom-32 left-1/2 -translate-x-1/2 h-[420px] w-[600px] opacity-30 blur-3xl" style={{ background: "radial-gradient(circle, #c1440e 0%, transparent 70%)" }}></div>
-        <a href="mailto:contact@aceservices.mg" className="relative inline-flex items-center gap-4 font-display text-[12vw] md:text-6xl hover:text-[#d9a441] transition-colors">
+        <a href="mailto:acesservices@gmail.com" className="relative inline-flex items-center gap-4 font-display text-[12vw] md:text-6xl hover:text-[#d9a441] transition-colors">
           CONTACTEZ-NOUS <ArrowUpRight size={44} />
         </a>
       </section>

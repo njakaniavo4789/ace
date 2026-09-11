@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Briefcase, Building2, Phone, ArrowRight, X, Menu, Sparkles, MapPin, Globe, Copy, Check } from 'lucide-react';
+import { Briefcase, Building2, Phone, ArrowRight, X, Menu, Sparkles, MapPin, Globe, Copy, Check, Settings } from 'lucide-react';
 
 import logoISPM from './assets/logo_ispm.png';
 import logoAce from './assets/logo.jpg';
 import handshakeBg from './assets/img _fond.jpg';
 import AboutPage from './AboutPage';
+import ProcessPage from './ProcessPage';
 
 /* ============================================= */
 /* SPOTLIGHT QUI SUIT LA SOURIS                 */
@@ -165,6 +166,7 @@ const LightSweep = () => (
 const NAV_ITEMS = [
   { icon: Building2, label: 'À propos', href: '#apropos' },
   { icon: Briefcase, label: 'Services', href: '#services' },
+  { icon: Settings, label: 'Processus', href: '#processus' },
   { icon: Phone, label: 'Contact', href: '#contact' },
 ];
 
@@ -174,7 +176,7 @@ const NAV_ITEMS = [
 const CONTACT_INFO = [
   { icon: Phone, label: 'Téléphone', value: '+261 20 22 123 45', href: 'tel:+261202212345', copyable: true },
   { icon: MapPin, label: 'Adresse', value: 'Galaxy Andraharo, Antananarivo', href: null, copyable: true },
-  { icon: Globe, label: 'Site web', value: 'www.aceservices.mg', href: 'https://www.aceservices.mg', copyable: false },
+  { icon: Globe, label: 'Email', value: 'acesservices@gmail.com', href: 'mailto:acesservices@gmail.com', copyable: true },
 ];
 
 /* ============================================= */
@@ -671,7 +673,7 @@ const HomePage = () => {
                 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 sm:mb-6 leading-[1.05] text-white font-display"
                 style={{ fontWeight: 600, textShadow: '0 4px 30px rgba(0,0,0,0.6)' }}
               >
-                L'Excellence au cœur<br className="hidden sm:block" /> de vos{" "}
+                Ensemble , vers la <br className="hidden sm:block" /> {" "}
                 <span
                   className="bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400 bg-clip-text text-transparent"
                   style={{ filter: 'drop-shadow(0 0 30px rgba(255, 210, 130, 0.5))' }}
@@ -859,6 +861,10 @@ const HomePage = () => {
           ) : activePage === 'À propos' ? (
             <div className="fixed inset-0 z-50 overflow-y-auto">
               <AboutPage onBack={() => setActivePage(null)} />
+            </div>
+          ) : activePage === 'Processus' ? (
+            <div className="fixed inset-0 z-50 overflow-y-auto">
+              <ProcessPage onBack={() => setActivePage(null)} />
             </div>
           ) : (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setActivePage(null)}>
