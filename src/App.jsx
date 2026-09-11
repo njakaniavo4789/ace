@@ -180,14 +180,26 @@ const CONTACT_INFO = [
 ];
 
 /* ============================================= */
-/* LOGO SANS CADRE — TAILLE AGRANDIE             */
+/* LOGO ROND — TAILLE AGRANDIE                   */
 /* ============================================= */
 const PremiumLogo = ({ src, alt, label, delay = 0 }) => (
   <div className="group relative animate-fade-in flex flex-col items-center" style={{ animationDelay: `${delay}s` }}>
-    <img
-      src={src} alt={alt}
-      className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-36 lg:h-36 object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(255,220,150,0.55)]"
-    />
+    <div
+      className="relative rounded-full overflow-hidden transition-transform duration-500 group-hover:scale-110 flex items-center justify-center"
+      style={{
+        width: 'clamp(5rem, 12vw, 9rem)',
+        height: 'clamp(5rem, 12vw, 9rem)',
+        background: 'rgba(255, 255, 255, 0.95)',
+        border: '2px solid rgba(245, 214, 138, 0.6)',
+        boxShadow: '0 0 25px rgba(255, 220, 150, 0.55), inset 0 0 0 4px rgba(255,255,255,0.85)',
+      }}
+    >
+      <img
+        src={src}
+        alt={alt}
+        className="w-full h-full object-contain p-2 sm:p-3"
+      />
+    </div>
     <div className="mt-3 flex flex-col items-center pointer-events-none">
       <span
         className="text-xs sm:text-sm md:text-base lg:text-lg tracking-[0.35em] uppercase font-semibold transition-all duration-500 group-hover:tracking-[0.45em] text-amber-100"
@@ -195,7 +207,8 @@ const PremiumLogo = ({ src, alt, label, delay = 0 }) => (
       >
         {label}
       </span>
-      <span className="mt-1.5 h-[2px] w-0 group-hover:w-16 transition-all duration-500 rounded-full"
+      <span
+        className="mt-1.5 h-[2px] w-0 group-hover:w-16 transition-all duration-500 rounded-full"
         style={{ background: 'linear-gradient(90deg, transparent, #f5d68a, transparent)' }}
       />
     </div>
