@@ -363,6 +363,8 @@ const HomePage = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [hoveredNav, setHoveredNav] = useState(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [initialStep, setInitialStep] = useState(0);
+  const [initialService, setInitialService] = useState(0);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -851,11 +853,25 @@ const HomePage = () => {
             </div>
           ) : activePage === 'Processus' ? (
             <div className="fixed inset-0 z-50 overflow-y-auto">
-              <ProcessPage onBack={() => setActivePage(null)} />
+              <ProcessPage
+                onBack={() => setActivePage(null)}
+                onGoToService={(step) => {
+                  setInitialService(step);
+                  setActivePage('Services');
+                }}
+                initialStep={initialStep}
+              />
             </div>
           ) : activePage === 'Services' ? (
             <div className="fixed inset-0 z-50 overflow-y-auto">
-              <ServicesPage onBack={() => setActivePage(null)} />
+              <ServicesPage
+                onBack={() => setActivePage(null)}
+                onGoToProcess={(service) => {
+                  setInitialStep(service);
+                  setActivePage('Processus');
+                }}
+                initialService={initialService}
+              />
             </div>
           ) : (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setActivePage(null)}>

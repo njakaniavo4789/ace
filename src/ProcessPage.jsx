@@ -136,8 +136,8 @@ const MagneticButton = ({ children, className, onClick }) => {
   );
 };
 
-export default function ProcessPage({ onBack }) {
-  const [activeStep, setActiveStep] = useState(0);
+export default function ProcessPage({ onBack, onGoToService, initialStep = 0 }) {
+  const [activeStep, setActiveStep] = useState(initialStep);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
@@ -256,7 +256,10 @@ export default function ProcessPage({ onBack }) {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                 </div>
 
-                <MagneticButton className="mt-8 flex items-center gap-2 text-sm font-bold uppercase tracking-wider hover:gap-4 transition-all group cursor-pointer">
+                <MagneticButton
+                  className="mt-8 flex items-center gap-2 text-sm font-bold uppercase tracking-wider hover:gap-4 transition-all group cursor-pointer"
+                  onClick={() => onGoToService(activeStep)}
+                >
                   Découvrir ce service
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
                 </MagneticButton>

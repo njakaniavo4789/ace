@@ -81,8 +81,8 @@ const AnimatedText = ({ text, className }) => {
   );
 };
 
-export default function ServicesPage({ onBack }) {
-  const [activeService, setActiveService] = useState(0);
+export default function ServicesPage({ onBack, onGoToProcess, initialService = 0 }) {
+  const [activeService, setActiveService] = useState(initialService);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
@@ -241,10 +241,21 @@ export default function ServicesPage({ onBack }) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-xl"
+                  className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-xl mb-8"
                 >
                   {service.description}
                 </motion.p>
+
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  onClick={() => onGoToProcess(activeService)}
+                  className="inline-flex items-center gap-3 bg-[#c9a961] text-white px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#b8954a] transition-all duration-300 cursor-pointer group"
+                >
+                  Voir le processus
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </motion.button>
               </div>
             </div>
 
