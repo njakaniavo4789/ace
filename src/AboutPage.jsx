@@ -5,13 +5,14 @@ import {
 } from "lucide-react";
 
 /* ============================================================
-   INTRO CINÉMATIQUE — style Netflix (inchangée)
+   INTRO CINÉMATIQUE — style "ta-dum" Netflix
    ============================================================ */
 function CinematicIntro({ onDone }) {
   const [count, setCount] = useState(0);
-  const [phase, setPhase] = useState("count");
+  const [phase, setPhase] = useState("count"); // count -> flash -> logo -> leaving
   const doneRef = useRef(false);
   const canvasRef = useRef(null);
+  const logoText = "ACE SERVICES";
 
   const finish = useCallback(() => {
     if (doneRef.current) return;
@@ -20,6 +21,7 @@ function CinematicIntro({ onDone }) {
     setTimeout(() => onDone(), 900);
   }, [onDone]);
 
+  // Particules d'ambiance
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -34,33 +36,38 @@ function CinematicIntro({ onDone }) {
     resize();
     window.addEventListener("resize", resize);
 
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 90; i++) {
       particles.push({
         x: Math.random() * w,
         y: Math.random() * h,
         r: Math.random() * 1.8 + 0.3,
         vx: (Math.random() - 0.5) * 0.25,
-        vy: -Math.random() * 0.4 - 0.1,
+        vy: -Math.random() * 0.5 - 0.15,
         a: Math.random() * 0.6 + 0.1
       });
     }
 
+    let boost = 0;
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
       particles.forEach((p) => {
-        p.x += p.vx;
-        p.y += p.vy;
+        p.x += p.vx * (1 + boost);
+        p.y += p.vy * (1 + boost);
         if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
         if (p.x < -10) p.x = w + 10;
         if (p.x > w + 10) p.x = -10;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(201,169,97,${p.a})`;
+        ctx.arc(p.x, p.y, p.r * (1 + boost * 0.6), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(201,169,97,${Math.min(1, p.a + boost * 0.4)})`;
         ctx.fill();
       });
+      if (boost > 0) boost = Math.max(0, boost - 0.02);
       raf = requestAnimationFrame(draw);
     };
     draw();
+
+    // écoute les "impacts" pour faire vibrer les particules
+    canvas._boostParticles = () => { boost = 1; };
 
     return () => {
       cancelAnimationFrame(raf);
@@ -80,18 +87,21 @@ function CinematicIntro({ onDone }) {
       if (p < 1) raf = requestAnimationFrame(tick);
       else {
         setCount(100);
+        canvasRef.current && canvasRef.current._boostParticles && canvasRef.current._boostParticles();
         setPhase("flash");
-        setTimeout(() => setPhase("logo"), 250);
-        setTimeout(finish, 2600);
+        setTimeout(() => setPhase("logo"), 260);
+        setTimeout(finish, 2800);
       }
     };
     raf = requestAnimationFrame(tick);
-    const failsafe = setTimeout(finish, 6000);
+    const failsafe = setTimeout(finish, 6200);
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(failsafe);
     };
   }, [finish]);
+
+  const showRings = phase === "flash" || phase === "logo";
 
   return (
     <div
@@ -99,10 +109,13 @@ function CinematicIntro({ onDone }) {
       style={{
         opacity: phase === "leaving" ? 0 : 1,
         transition: "opacity 0.9s ease",
-        pointerEvents: phase === "leaving" ? "none" : "auto"
+        pointerEvents: phase === "leaving" ? "none" : "auto",
+        animation: phase === "flash" ? "screenShake 0.35s ease" : "none"
       }}
     >
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
+
+      {/* halo central */}
       <div
         className="absolute h-[900px] w-[900px] rounded-full blur-3xl pulse-glow"
         style={{
@@ -111,18 +124,44 @@ function CinematicIntro({ onDone }) {
           transition: "opacity 0.3s ease"
         }}
       />
+
+      {/* anneaux sonores type "ta-dum" */}
+      {showRings && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          {[0, 0.16, 0.32].map((delay, i) => (
+            <span
+              key={i}
+              className="absolute rounded-full border-2"
+              style={{
+                width: 140,
+                height: 140,
+                borderColor: "rgba(201,169,97,0.65)",
+                animation: `ringExpand 1.4s cubic-bezier(0.15,0.7,0.3,1) ${delay}s both`
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* grain film */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.07]"
         style={{ backgroundImage: "repeating-linear-gradient(0deg, #fff 0px, #fff 1px, transparent 1px, transparent 3px)" }}
       />
+
+      {/* flash blanc */}
       <div
         className="absolute inset-0 bg-white pointer-events-none"
-        style={{ opacity: phase === "flash" ? 0.9 : 0, transition: "opacity 0.25s ease" }}
+        style={{ opacity: phase === "flash" ? 0.95 : 0, transition: "opacity 0.22s ease" }}
       />
 
       {phase === "count" && (
         <div className="relative text-center">
-          <p className="font-display text-[26vw] md:text-[16rem] font-extrabold text-white leading-none tabular-nums tracking-tighter">
+          <p
+            key={count}
+            className="font-display text-[26vw] md:text-[16rem] font-extrabold text-white leading-none tabular-nums tracking-tighter"
+            style={{ animation: "digitPop 0.16s ease" }}
+          >
             {count}
           </p>
           <div className="mt-6 mx-auto h-[2px] w-64 bg-white/10 overflow-hidden">
@@ -136,18 +175,26 @@ function CinematicIntro({ onDone }) {
 
       {(phase === "logo" || phase === "flash") && (
         <div className="relative text-center px-6">
-          <p
-            className="font-display text-5xl md:text-7xl font-extrabold uppercase text-white tracking-tight"
-            style={{ animation: "logoReveal 1.2s cubic-bezier(0.22,1,0.36,1) forwards" }}
-          >
-            ACE Services
+          <p className="font-display text-5xl md:text-7xl font-extrabold uppercase text-white tracking-tight flex justify-center flex-wrap">
+            {logoText.split("").map((ch, i) => (
+              <span
+                key={i}
+                style={{
+                  display: "inline-block",
+                  whiteSpace: "pre",
+                  animation: `letterDrop 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.035}s both, chromaSnap 0.5s ease-out ${0.55 + i * 0.035}s both`
+                }}
+              >
+                {ch}
+              </span>
+            ))}
           </p>
           <div className="mt-8 w-40 h-[2px] bg-white/20 mx-auto overflow-hidden">
-            <div className="h-full bg-[#c9a961]" style={{ animation: "lineGrow 1.4s ease forwards" }} />
+            <div className="h-full bg-[#c9a961]" style={{ animation: "lineGrow 1.4s 0.5s ease forwards" }} />
           </div>
           <p
             className="mt-5 text-[10px] uppercase tracking-[0.6em] text-[#c9a961]"
-            style={{ animation: "fadeUp 1s 0.4s ease both" }}
+            style={{ animation: "fadeUp 1s 0.9s ease both" }}
           >
             Notre histoire
           </p>
@@ -158,6 +205,30 @@ function CinematicIntro({ onDone }) {
         @keyframes logoReveal {
           0% { opacity: 0; transform: scale(1.15); filter: blur(12px); letter-spacing: 0.1em; }
           100% { opacity: 1; transform: scale(1); filter: blur(0); letter-spacing: -0.02em; }
+        }
+        @keyframes letterDrop {
+          0% { opacity: 0; transform: translateY(-26px) scale(0.7); filter: blur(6px); }
+          60% { opacity: 1; transform: translateY(4px) scale(1.05); filter: blur(0); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes chromaSnap {
+          0% { text-shadow: -3px 0 #ff2d55, 3px 0 #2dd4ff; }
+          70% { text-shadow: -1px 0 #ff2d55, 1px 0 #2dd4ff; }
+          100% { text-shadow: none; }
+        }
+        @keyframes digitPop {
+          0% { transform: scale(1.18); }
+          100% { transform: scale(1); }
+        }
+        @keyframes ringExpand {
+          0% { transform: scale(0.2); opacity: 0.85; }
+          100% { transform: scale(5.5); opacity: 0; }
+        }
+        @keyframes screenShake {
+          10%, 90% { transform: translate3d(-1px, 0, 0); }
+          20%, 80% { transform: translate3d(2px, 0, 0); }
+          30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+          40%, 60% { transform: translate3d(4px, 0, 0); }
         }
         @keyframes lineGrow { 0% { width: 0%; } 100% { width: 100%; } }
         @keyframes fadeUp {
@@ -170,7 +241,7 @@ function CinematicIntro({ onDone }) {
 }
 
 /* ============================================================
-   SÉQUENCE CINÉMA (inchangée)
+   SÉQUENCE CINÉMA
    ============================================================ */
 function CinemaSequence({ onDone }) {
   const scenes = useMemo(() => [
@@ -185,6 +256,7 @@ function CinemaSequence({ onDone }) {
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(false);
   const [started, setStarted] = useState(false);
+  const [impactFlash, setImpactFlash] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setStarted(true), 400);
@@ -194,6 +266,12 @@ function CinemaSequence({ onDone }) {
   useEffect(() => {
     if (!started) return;
     setVisible(false);
+
+    if (scenes[index].beat === "impact") {
+      setImpactFlash(true);
+      setTimeout(() => setImpactFlash(false), 200);
+    }
+
     const appear = setTimeout(() => setVisible(true), 200);
 
     const total = scenes[index].beat === "pause" ? 2000 : 3200;
@@ -229,6 +307,10 @@ function CinemaSequence({ onDone }) {
       <div
         className="pointer-events-none absolute inset-0"
         style={{ background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.85) 100%)" }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-white"
+        style={{ opacity: impactFlash ? 0.5 : 0, transition: "opacity 0.18s ease" }}
       />
       <div className="pointer-events-none absolute top-0 left-0 right-0 h-[6vh] bg-black z-10" />
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-[6vh] bg-black z-10" />
@@ -268,6 +350,91 @@ function CinemaSequence({ onDone }) {
           Passer l'intro
         </button>
       </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   FOND ANIMÉ DE LA PAGE (particules + halos dérivants)
+   ============================================================ */
+function PageBackground() {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let raf, w, h;
+    const particles = [];
+
+    const resize = () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    for (let i = 0; i < 46; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.6 + 0.4,
+        vx: (Math.random() - 0.5) * 0.08,
+        vy: -Math.random() * 0.14 - 0.02,
+        a: Math.random() * 0.35 + 0.08
+      });
+    }
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+        if (p.x < -10) p.x = w + 10;
+        if (p.x > w + 10) p.x = -10;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(201,169,97,${p.a})`;
+        ctx.fill();
+      });
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+      <canvas ref={canvasRef} className="absolute inset-0 opacity-70" />
+      <div
+        className="absolute -top-32 -left-32 h-[520px] w-[520px] rounded-full blur-3xl"
+        style={{
+          background: "radial-gradient(circle, rgba(201,169,97,0.22) 0%, transparent 70%)",
+          animation: "blobFloatA 24s ease-in-out infinite alternate"
+        }}
+      />
+      <div
+        className="absolute bottom-[-10%] right-[-8%] h-[620px] w-[620px] rounded-full blur-3xl"
+        style={{
+          background: "radial-gradient(circle, rgba(201,169,97,0.16) 0%, transparent 70%)",
+          animation: "blobFloatB 28s ease-in-out infinite alternate"
+        }}
+      />
+      <style>{`
+        @keyframes blobFloatA {
+          0% { transform: translate(0px, 0px) scale(1); }
+          100% { transform: translate(60px, 90px) scale(1.15); }
+        }
+        @keyframes blobFloatB {
+          0% { transform: translate(0px, 0px) scale(1); }
+          100% { transform: translate(-70px, -60px) scale(1.1); }
+        }
+      `}</style>
     </div>
   );
 }
@@ -372,10 +539,13 @@ const SLIDES = [
 /* ============================================================
    PAGE À PROPOS — présentation en SLIDES
    ============================================================ */
-export default function AboutPage({ onBack }) {
+export default function AboutPage({ onBack = () => {} }) {
   const [step, setStep] = useState("intro");
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState("next"); // "next" | "prev"
+  const [animPhase, setAnimPhase] = useState("idle"); // "idle" | "out" | "in"
+  const [isAnimating, setIsAnimating] = useState(false);
+  const lockRef = useRef(false);
 
   const handleIntroDone = useCallback(() => setStep("cinema"), []);
   const handleCinemaDone = useCallback(() => setStep("page"), []);
@@ -385,20 +555,26 @@ export default function AboutPage({ onBack }) {
     return () => { document.body.style.overflow = ""; };
   }, [step]);
 
-  const goNext = useCallback(() => {
-    setDirection("next");
-    setCurrent((i) => Math.min(i + 1, SLIDES.length - 1));
-  }, []);
-
-  const goPrev = useCallback(() => {
-    setDirection("prev");
-    setCurrent((i) => Math.max(i - 1, 0));
-  }, []);
-
-  const goTo = useCallback((idx) => {
+  const changeTo = useCallback((idx) => {
+    if (lockRef.current || idx < 0 || idx >= SLIDES.length || idx === current) return;
+    lockRef.current = true;
+    setIsAnimating(true);
     setDirection(idx > current ? "next" : "prev");
-    setCurrent(idx);
+    setAnimPhase("out");
+    setTimeout(() => {
+      setCurrent(idx);
+      setAnimPhase("in");
+      setTimeout(() => {
+        setAnimPhase("idle");
+        setIsAnimating(false);
+        lockRef.current = false;
+      }, 520);
+    }, 320);
   }, [current]);
+
+  const goNext = useCallback(() => changeTo(current + 1), [changeTo, current]);
+  const goPrev = useCallback(() => changeTo(current - 1), [changeTo, current]);
+  const goTo = useCallback((idx) => changeTo(idx), [changeTo]);
 
   // Navigation clavier
   useEffect(() => {
@@ -414,6 +590,14 @@ export default function AboutPage({ onBack }) {
   const slide = SLIDES[current];
   const isFirst = current === 0;
   const isLast = current === SLIDES.length - 1;
+  const progressPct = ((current + 1) / SLIDES.length) * 100;
+
+  const slideAnimation =
+    animPhase === "out"
+      ? `${direction === "next" ? "slideOutNext" : "slideOutPrev"} 0.32s cubic-bezier(0.4,0,1,1) both`
+      : animPhase === "in"
+        ? `${direction === "next" ? "slideInNext" : "slideInPrev"} 0.55s cubic-bezier(0.22,1,0.36,1) both`
+        : "none";
 
   return (
     <div className="min-h-screen w-full bg-white text-gray-800" style={{ fontFamily: "Manrope, sans-serif" }}>
@@ -427,12 +611,20 @@ export default function AboutPage({ onBack }) {
         }
         .pulse-glow { animation: pulseGlow 6s ease-in-out infinite; }
         @keyframes slideInNext {
-          0% { opacity: 0; transform: translateX(40px); filter: blur(6px); }
-          100% { opacity: 1; transform: translateX(0); filter: blur(0); }
+          0% { opacity: 0; transform: translateX(40px) scale(0.99); filter: blur(6px); }
+          100% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
         }
         @keyframes slideInPrev {
-          0% { opacity: 0; transform: translateX(-40px); filter: blur(6px); }
-          100% { opacity: 1; transform: translateX(0); filter: blur(0); }
+          0% { opacity: 0; transform: translateX(-40px) scale(0.99); filter: blur(6px); }
+          100% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+        }
+        @keyframes slideOutNext {
+          0% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+          100% { opacity: 0; transform: translateX(-40px) scale(0.99); filter: blur(6px); }
+        }
+        @keyframes slideOutPrev {
+          0% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+          100% { opacity: 0; transform: translateX(40px) scale(0.99); filter: blur(6px); }
         }
       `}</style>
 
@@ -446,8 +638,18 @@ export default function AboutPage({ onBack }) {
           pointerEvents: step === "page" ? "auto" : "none"
         }}
       >
+        {step === "page" && <PageBackground />}
+
+        {/* barre de progression globale */}
+        <div className="fixed top-0 left-0 right-0 z-20 h-[2px] bg-gray-100">
+          <div
+            className="h-full bg-[#c9a961]"
+            style={{ width: `${progressPct}%`, transition: "width 0.5s cubic-bezier(0.22,1,0.36,1)" }}
+          />
+        </div>
+
         {/* ============ HEADER ============ */}
-        <header className="px-6 md:px-12 pt-8 flex items-center justify-between">
+        <header className="relative z-10 px-6 md:px-12 pt-8 flex items-center justify-between">
           <button
             onClick={onBack}
             className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition-colors cursor-pointer group"
@@ -464,7 +666,7 @@ export default function AboutPage({ onBack }) {
         </header>
 
         {/* ============ SLIDE ============ */}
-        <main className="relative px-6 md:px-12 pt-10 pb-32 min-h-[80vh] flex items-center">
+        <main className="relative z-10 px-6 md:px-12 pt-10 pb-32 min-h-[80vh] flex items-center">
           {/* halo de fond */}
           <div
             className="pointer-events-none absolute top-1/3 left-1/4 h-[500px] w-[500px] rounded-full opacity-20 blur-3xl pulse-glow"
@@ -474,9 +676,7 @@ export default function AboutPage({ onBack }) {
           <div
             key={slide.id}
             className="relative w-full max-w-6xl mx-auto grid lg:grid-cols-[1fr_auto] gap-12 lg:gap-20 items-center"
-            style={{
-              animation: `${direction === "next" ? "slideInNext" : "slideInPrev"} 0.7s cubic-bezier(0.22,1,0.36,1) both`
-            }}
+            style={{ animation: slideAnimation }}
           >
             {/* Colonne gauche : contenu */}
             <div>
@@ -547,9 +747,9 @@ export default function AboutPage({ onBack }) {
             {/* Précédent */}
             <button
               onClick={goPrev}
-              disabled={isFirst}
+              disabled={isFirst || isAnimating}
               className={`inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest transition-all cursor-pointer ${
-                isFirst ? "text-gray-300 cursor-not-allowed" : "text-gray-700 hover:text-black"
+                isFirst || isAnimating ? "text-gray-300 cursor-not-allowed" : "text-gray-700 hover:text-black"
               }`}
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 group-hover:border-black transition-colors">
@@ -564,6 +764,7 @@ export default function AboutPage({ onBack }) {
                 <button
                   key={s.id}
                   onClick={() => goTo(i)}
+                  disabled={isAnimating}
                   aria-label={`Aller à ${s.title}`}
                   className="group cursor-pointer"
                 >
@@ -583,7 +784,10 @@ export default function AboutPage({ onBack }) {
             {!isLast ? (
               <button
                 onClick={goNext}
-                className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-700 hover:text-black transition-all cursor-pointer"
+                disabled={isAnimating}
+                className={`inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest transition-all cursor-pointer ${
+                  isAnimating ? "text-gray-300 cursor-not-allowed" : "text-gray-700 hover:text-black"
+                }`}
               >
                 Suivant
                 <span className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 hover:border-black transition-colors">
