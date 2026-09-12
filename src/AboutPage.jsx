@@ -1,11 +1,32 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import {
   ArrowLeft, ArrowRight, ArrowUpRight, Lightbulb, Users, Target,
-  Heart, Sparkles, Compass, Handshake, ShieldCheck, Rocket, PenTool
+  Heart, Sparkles, Compass, Handshake, ShieldCheck, Rocket, PenTool,
+  BookOpen, Library, Barcode
 } from "lucide-react";
 
 /* ============================================================
-   INTRO CINÉMATIQUE — style "ta-dum" Netflix
+   EASING "PAPIER LÉGER"
+   ============================================================ */
+function paperEase(raw) {
+  let eased;
+  if (raw < 0.14) {
+    const t = raw / 0.14;
+    eased = t * t * 0.05;
+  } else if (raw < 0.78) {
+    const t = (raw - 0.14) / 0.64;
+    eased = 0.05 + (1 - Math.pow(1 - t, 2.1)) * 0.88;
+  } else {
+    const t = (raw - 0.78) / 0.22;
+    const settle = 1 - Math.pow(1 - t, 3);
+    const wobble = Math.sin(t * Math.PI) * 0.018 * (1 - t);
+    eased = 0.93 + settle * 0.07 + wobble;
+  }
+  return Math.min(1, Math.max(0, eased));
+}
+
+/* ============================================================
+   INTRO CINÉMATIQUE
    ============================================================ */
 function CinematicIntro({ onDone }) {
   const [count, setCount] = useState(0);
@@ -344,7 +365,7 @@ function CinemaSequence({ onDone }) {
 }
 
 /* ============================================================
-   FOND ANIMÉ DE LA PAGE
+   FOND ANIMÉ
    ============================================================ */
 function PageBackground() {
   const canvasRef = useRef(null);
@@ -436,7 +457,7 @@ const SLIDES = [
     id: "intro",
     eyebrow: "Le commencement",
     title: "À propos de nous",
-    icon: <Lightbulb size={22} />,
+    icon: <Lightbulb size={18} />,
     tag: "01 — Présentation",
     description:
       "ACE Services est un service spécialisé dans l'accompagnement à la création d'entreprise. Nous aidons les futurs entrepreneurs et porteurs de projets à transformer leurs idées en projets concrets et réalisables.",
@@ -451,7 +472,7 @@ const SLIDES = [
     id: "who",
     eyebrow: "Qui nous sommes",
     title: "Notre identité",
-    icon: <Users size={22} />,
+    icon: <Users size={18} />,
     tag: "02 — Identité",
     description:
       "ACE Services est une entreprise spécialisée dans l'accompagnement à la création d'entreprise et le conseil aux porteurs de projets à Madagascar.",
@@ -466,7 +487,7 @@ const SLIDES = [
     id: "mission",
     eyebrow: "Notre raison d'être",
     title: "Notre mission",
-    icon: <Target size={22} />,
+    icon: <Target size={18} />,
     tag: "03 — Mission",
     description:
       "Accompagner et conseiller les entrepreneurs dans la création et la gestion de leur entreprise, en rendant le parcours plus simple, accessible et sécurisé.",
@@ -481,7 +502,7 @@ const SLIDES = [
     id: "vision",
     eyebrow: "Notre horizon",
     title: "Notre vision",
-    icon: <Compass size={22} />,
+    icon: <Compass size={18} />,
     tag: "04 — Vision",
     description:
       "Devenir la référence de l'accompagnement entrepreneurial à Madagascar, en créant un écosystème où chaque idée trouve les moyens de devenir réalité.",
@@ -496,28 +517,28 @@ const SLIDES = [
     id: "values",
     eyebrow: "Ce qui nous guide",
     title: "Nos valeurs",
-    icon: <Heart size={22} />,
+    icon: <Heart size={18} />,
     tag: "05 — Valeurs",
     description: "Quatre piliers qui orientent chacune de nos actions et décisions au quotidien.",
     values: [
-      { icon: <Handshake size={18} />, label: "Écoute", text: "Comprendre vos besoins pour mieux vous conseiller." },
-      { icon: <ShieldCheck size={18} />, label: "Professionnalisme", text: "Des solutions fiables et adaptées à votre projet." },
-      { icon: <Heart size={18} />, label: "Confiance", text: "Une relation durable et transparente." },
-      { icon: <Rocket size={18} />, label: "Engagement", text: "Votre réussite est notre moteur." }
+      { icon: <Handshake size={14} />, label: "Écoute", text: "Comprendre vos besoins pour mieux vous conseiller." },
+      { icon: <ShieldCheck size={14} />, label: "Professionnalisme", text: "Des solutions fiables et adaptées à votre projet." },
+      { icon: <Heart size={14} />, label: "Confiance", text: "Une relation durable et transparente." },
+      { icon: <Rocket size={14} />, label: "Engagement", text: "Votre réussite est notre moteur." }
     ]
-  },
-  {
-    id: "cta",
-    eyebrow: "Le mot de la fin",
-    title: "À vous d'écrire votre histoire",
-    icon: <PenTool size={22} />,
-    tag: "06 — Votre tour",
-    cta: true
   }
 ];
 
+const CTA_SLIDE = {
+  id: "cta",
+  tag: "06 — Votre tour",
+  icon: <PenTool size={18} />,
+  cta: true
+};
+const TOTAL_CHAPTERS = SLIDES.length + 1;
+
 /* ============================================================
-   SLIDE CONTENT — version compacte pour une PAGE de livre
+   SLIDE CONTENT
    ============================================================ */
 function SlideContent({ slide, slideIndex, pageSide }) {
   if (slide.cta) {
@@ -525,70 +546,70 @@ function SlideContent({ slide, slideIndex, pageSide }) {
   }
   return (
     <div className="w-full h-full flex flex-col justify-between">
-      <div className="flex items-center justify-between mb-6">
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#c9a961]">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-[8px] font-black uppercase tracking-[0.35em] text-[#c9a961]">
           {slide.tag}
         </p>
-        <span className="font-display text-xs text-gray-300 tracking-widest">
+        <span className="font-display text-[9px] text-gray-300 tracking-widest">
           {String(slideIndex + 1).padStart(2, "0")} / {String(SLIDES.length).padStart(2, "0")}
         </span>
       </div>
 
       <div className="flex-1">
-        <h2 className="font-display font-extrabold uppercase leading-[0.92] text-4xl xl:text-5xl text-gray-900 mb-5">
+        <h2 className="font-display font-extrabold uppercase leading-[0.92] text-xl xl:text-2xl text-gray-900 mb-2">
           {slide.title}
         </h2>
 
-        <div className="w-12 h-[2px] bg-[#c9a961] mb-5" />
+        <div className="w-8 h-[2px] bg-[#c9a961] mb-2" />
 
-        <p className="text-base text-gray-600 leading-relaxed mb-7">
+        <p className="text-[11px] xl:text-xs text-gray-600 leading-relaxed mb-3">
           {slide.description}
         </p>
 
         {slide.bullets && (
-          <ul className="space-y-3">
+          <ul className="space-y-1.5">
             {slide.bullets.map((b, i) => (
               <li
                 key={i}
-                className="flex items-start gap-3 text-gray-700"
+                className="flex items-start gap-2 text-gray-700"
                 style={{ animation: `bulletIn 0.5s ${0.2 + i * 0.08}s both` }}
               >
-                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#c9a961] shrink-0" />
-                <span className="text-sm leading-relaxed">{b}</span>
+                <span className="mt-1.5 h-1 w-1 rounded-full bg-[#c9a961] shrink-0" />
+                <span className="text-[10px] xl:text-[11px] leading-relaxed">{b}</span>
               </li>
             ))}
           </ul>
         )}
 
         {slide.values && (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2">
             {slide.values.map((v, i) => (
               <div
                 key={v.label}
-                className="border-l-2 border-[#c9a961]/60 pl-3 py-1.5"
+                className="border-l-2 border-[#c9a961]/60 pl-2 py-1"
                 style={{ animation: `bulletIn 0.5s ${0.2 + i * 0.08}s both` }}
               >
-                <div className="flex items-center gap-1.5 mb-1 text-[#c9a961]">
+                <div className="flex items-center gap-1 mb-0.5 text-[#c9a961]">
                   {v.icon}
-                  <p className="font-display text-sm font-bold">{v.label}</p>
+                  <p className="font-display text-[10px] font-bold">{v.label}</p>
                 </div>
-                <p className="text-xs text-gray-500 leading-snug">{v.text}</p>
+                <p className="text-[9px] text-gray-500 leading-snug">{v.text}</p>
               </div>
             ))}
           </div>
         )}
       </div>
 
-      <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
-        <div className="flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#c9a961]/40 text-[#c9a961]">
+      <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100">
+        <div className="flex items-center gap-1.5">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#c9a961]/40 text-[#c9a961]">
             {slide.icon}
           </span>
-          <span className="text-[10px] uppercase tracking-[0.3em] text-gray-400">
+          <span className="text-[8px] uppercase tracking-[0.3em] text-gray-400">
             ACE Services
           </span>
         </div>
-        <span className="text-[10px] uppercase tracking-[0.3em] text-gray-300">
+        <span className="text-[8px] uppercase tracking-[0.3em] text-gray-300">
           {pageSide === "left" ? "— Chapitre" : "Suite —"}
         </span>
       </div>
@@ -597,8 +618,7 @@ function SlideContent({ slide, slideIndex, pageSide }) {
 }
 
 /* ============================================================
-   CTA CONTENT — "À vous d'écrire votre histoire"
-   Animation motion spectaculaire
+   CTA CONTENT
    ============================================================ */
 function CTAContent({ slide, slideIndex }) {
   const containerRef = useRef(null);
@@ -606,9 +626,7 @@ function CTAContent({ slide, slideIndex }) {
   const [inkProgress, setInkProgress] = useState(0);
 
   useEffect(() => {
-    // Délai initial pour laisser la page se révéler
     const t1 = setTimeout(() => setMounted(true), 300);
-    // Animation de la ligne d'encre
     const t2 = setTimeout(() => {
       let start = performance.now();
       const duration = 1400;
@@ -635,7 +653,6 @@ function CTAContent({ slide, slideIndex }) {
       ref={containerRef}
       className="w-full h-full flex flex-col justify-between relative overflow-hidden"
     >
-      {/* Particules dorées flottantes */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {[...Array(14)].map((_, i) => (
           <span
@@ -657,36 +674,32 @@ function CTAContent({ slide, slideIndex }) {
         ))}
       </div>
 
-      {/* Halo lumineux */}
       <div
         className="absolute pointer-events-none"
         style={{
           top: "20%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: "500px",
-          height: "500px",
+          width: "300px",
+          height: "300px",
           background: "radial-gradient(circle, rgba(201,169,97,0.15) 0%, transparent 65%)",
           opacity: mounted ? 1 : 0,
           transition: "opacity 1.5s ease"
         }}
       />
 
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6 relative z-10">
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#c9a961]">
+      <div className="flex items-center justify-between mb-3 relative z-10">
+        <p className="text-[8px] font-black uppercase tracking-[0.35em] text-[#c9a961]">
           {slide.tag}
         </p>
-        <span className="font-display text-xs text-gray-300 tracking-widest">
-          {String(slideIndex + 1).padStart(2, "0")} / {String(SLIDES.length).padStart(2, "0")}
+        <span className="font-display text-[9px] text-gray-300 tracking-widest">
+          {String(slideIndex + 1).padStart(2, "0")} / {String(TOTAL_CHAPTERS).padStart(2, "0")}
         </span>
       </div>
 
-      {/* Contenu principal */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center relative z-10 px-4">
-        {/* Icône plume animée */}
+      <div className="flex-1 flex flex-col items-center justify-center text-center relative z-10 px-2">
         <div
-          className="mb-6"
+          className="mb-3"
           style={{
             opacity: mounted ? 1 : 0,
             transform: mounted ? "translateY(0) rotate(0deg) scale(1)" : "translateY(-30px) rotate(-45deg) scale(0.5)",
@@ -694,10 +707,9 @@ function CTAContent({ slide, slideIndex }) {
           }}
         >
           <div className="relative">
-            <span className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#c9a961]/50 text-[#c9a961] bg-white/60 backdrop-blur-sm">
-              <PenTool size={22} style={{ animation: mounted ? "penFloat 3s ease-in-out infinite" : "none" }} />
+            <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#c9a961]/50 text-[#c9a961] bg-white/60 backdrop-blur-sm">
+              <PenTool size={16} style={{ animation: mounted ? "penFloat 3s ease-in-out infinite" : "none" }} />
             </span>
-            {/* Éclat autour de l'icône */}
             <span
               className="absolute inset-0 rounded-full"
               style={{
@@ -708,8 +720,7 @@ function CTAContent({ slide, slideIndex }) {
           </div>
         </div>
 
-        {/* Titre avec animation lettre par lettre */}
-        <h2 className="font-display font-extrabold uppercase leading-[0.95] text-3xl xl:text-4xl text-gray-900 mb-5 max-w-md">
+        <h2 className="font-display font-extrabold uppercase leading-[0.95] text-lg xl:text-xl text-gray-900 mb-2 max-w-xs">
           {words.map((word, wi) => (
             <span
               key={wi}
@@ -725,8 +736,7 @@ function CTAContent({ slide, slideIndex }) {
           ))}
         </h2>
 
-        {/* Ligne d'encre qui se trace */}
-        <div className="relative mb-5" style={{ height: "2px", width: "180px", maxWidth: "70%" }}>
+        <div className="relative mb-2" style={{ height: "2px", width: "120px", maxWidth: "70%" }}>
           <div
             className="absolute inset-y-0 left-0 bg-[#c9a961]"
             style={{
@@ -734,14 +744,13 @@ function CTAContent({ slide, slideIndex }) {
               boxShadow: "0 0 8px rgba(201,169,97,0.6)"
             }}
           />
-          {/* Tête de plume au bout de la ligne */}
           {inkProgress > 0 && inkProgress < 1 && (
             <span
               className="absolute top-1/2 -translate-y-1/2 rounded-full"
               style={{
                 left: `${inkProgress * 100}%`,
-                width: "8px",
-                height: "8px",
+                width: "6px",
+                height: "6px",
                 background: "#c9a961",
                 boxShadow: "0 0 12px rgba(201,169,97,0.9)",
                 transform: "translate(-50%, -50%)"
@@ -750,9 +759,8 @@ function CTAContent({ slide, slideIndex }) {
           )}
         </div>
 
-        {/* Sous-titre */}
         <p
-          className="text-sm text-gray-600 leading-relaxed max-w-xs mb-6"
+          className="text-[10px] xl:text-[11px] text-gray-600 leading-relaxed max-w-[240px] mb-3"
           style={{
             opacity: mounted ? 1 : 0,
             transform: mounted ? "translateY(0)" : "translateY(15px)",
@@ -762,15 +770,13 @@ function CTAContent({ slide, slideIndex }) {
           Chaque grande aventure commence par une première ligne. La vôtre commence maintenant.
         </p>
 
-        {/* Bouton d'action */}
         <button
           onClick={(e) => {
             e.stopPropagation();
-            // Action déclenchée ici (à connecter au parent)
             const evt = new CustomEvent("cta-click");
             window.dispatchEvent(evt);
           }}
-          className="group inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-[#c9a961] hover:text-black transition-all duration-300 cursor-pointer"
+          className="group inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 text-[8px] font-black uppercase tracking-[0.3em] hover:bg-[#c9a961] hover:text-black transition-all duration-300 cursor-pointer"
           style={{
             opacity: mounted ? 1 : 0,
             transform: mounted ? "translateY(0) scale(1)" : "translateY(15px) scale(0.95)",
@@ -778,21 +784,20 @@ function CTAContent({ slide, slideIndex }) {
           }}
         >
           Démarrer mon projet
-          <ArrowUpRight size={12} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <ArrowUpRight size={10} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </button>
       </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100 relative z-10">
-        <div className="flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#c9a961]/40 text-[#c9a961]">
+      <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100 relative z-10">
+        <div className="flex items-center gap-1.5">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#c9a961]/40 text-[#c9a961]">
             {slide.icon}
           </span>
-          <span className="text-[10px] uppercase tracking-[0.3em] text-gray-400">
+          <span className="text-[8px] uppercase tracking-[0.3em] text-gray-400">
             ACE Services
           </span>
         </div>
-        <span className="text-[10px] uppercase tracking-[0.3em] text-gray-300">
+        <span className="text-[8px] uppercase tracking-[0.3em] text-gray-300">
           Fin —
         </span>
       </div>
@@ -817,7 +822,123 @@ function CTAContent({ slide, slideIndex }) {
 }
 
 /* ============================================================
-   PAGE À PROPOS — LIVRE 3D IMMERSIF avec CTA final
+   COVER FACE
+   ============================================================ */
+function CoverFace({ variant, onAction, live }) {
+  const isStart = variant === "start";
+
+  return (
+    <div className="absolute inset-0 overflow-hidden rounded-lg">
+      <div className="absolute inset-0 book-cover" />
+
+      <div
+        className="absolute inset-0 opacity-[0.5] pointer-events-none"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(115deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 3px)"
+        }}
+      />
+
+      <div className="absolute inset-[14px] border border-[#c9a961]/35 rounded-sm pointer-events-none" />
+      <div className="absolute inset-[18px] border border-[#c9a961]/15 rounded-sm pointer-events-none" />
+
+      {live && (
+        <div
+          className="absolute inset-0 pointer-events-none mix-blend-screen"
+          style={{
+            background:
+              "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.10) 45%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.10) 55%, transparent 70%)",
+            backgroundSize: "260% 260%",
+            animation: "sheenSweep 7s ease-in-out infinite"
+          }}
+        />
+      )}
+
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(circle at 50% 32%, rgba(201,169,97,0.16) 0%, transparent 60%)"
+        }}
+      />
+
+      <div className="relative h-full flex flex-col items-center justify-center text-center px-6">
+        {isStart ? (
+          <>
+            <div
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#c9a961]/40 px-3 py-1 mb-5"
+              style={{ animation: live ? "fadeUp 0.9s 0.15s ease both" : "none" }}
+            >
+              <Library size={10} className="text-[#c9a961]" />
+              <span className="text-[8px] uppercase tracking-[0.3em] text-[#c9a961]/90">
+                Bibliothèque ACE Services
+              </span>
+            </div>
+
+            <span
+              className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#c9a961]/50 text-[#c9a961] mb-5"
+              style={{ animation: live ? "fadeUp 0.9s 0.3s ease both" : "none" }}
+            >
+              <Compass size={20} />
+            </span>
+
+            <h2
+              className="font-display font-extrabold uppercase text-white leading-[0.95] text-3xl md:text-4xl tracking-tight mb-3"
+              style={{ animation: live ? "fadeUp 0.9s 0.45s ease both" : "none" }}
+            >
+              ACE Services
+            </h2>
+
+            <div
+              className="w-10 h-[2px] bg-[#c9a961] mb-3"
+              style={{ animation: live ? "fadeUp 0.9s 0.6s ease both" : "none" }}
+            />
+
+            <p
+              className="text-[9px] uppercase tracking-[0.4em] text-[#c9a961] mb-6"
+              style={{ animation: live ? "fadeUp 0.9s 0.7s ease both" : "none" }}
+            >
+              Notre histoire
+            </p>
+
+            <button
+              onClick={onAction}
+              className="group inline-flex items-center gap-2 rounded-full bg-[#c9a961] text-black px-5 py-2.5 text-[9px] font-black uppercase tracking-[0.3em] hover:bg-white transition-all duration-300 cursor-pointer"
+              style={{ animation: live ? "fadeUp 0.9s 0.9s ease both" : "none" }}
+            >
+              <BookOpen size={11} />
+              Ouvrir le livre
+            </button>
+
+            <div
+              className="absolute bottom-5 left-5 flex items-center gap-1.5 bg-white/95 rounded-[2px] px-2 py-1 shadow-md"
+              style={{ animation: live ? "fadeUp 0.9s 1.05s ease both" : "none" }}
+            >
+              <Barcode size={18} className="text-gray-800" />
+              <div className="text-left leading-tight">
+                <p className="text-[7px] font-bold text-gray-700 tracking-wide">ACE 2026.01</p>
+                <p className="text-[6px] text-gray-400 tracking-wide">Notre histoire</p>
+              </div>
+            </div>
+
+            <div
+              className="absolute bottom-5 right-5 flex h-9 w-9 items-center justify-center rounded-full border border-[#c9a961]/50 text-[#c9a961]"
+              style={{ animation: live ? "fadeUp 0.9s 1.05s ease both" : "none" }}
+            >
+              <span className="text-[6px] uppercase tracking-widest leading-tight text-center">
+                Éd.<br />2026
+              </span>
+            </div>
+          </>
+        ) : (
+          <CTAContent slide={CTA_SLIDE} slideIndex={5} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   PAGE À PROPOS — LIVRE 3D
    ============================================================ */
 export default function AboutPage({ onBack = () => {} }) {
   const [step, setStep] = useState("intro");
@@ -826,6 +947,7 @@ export default function AboutPage({ onBack = () => {} }) {
     active: false,
     direction: "next",
     progress: 0,
+    velocity: 0,
     fromIndex: 0,
     toIndex: 0
   });
@@ -833,14 +955,7 @@ export default function AboutPage({ onBack = () => {} }) {
   const animatingRef = useRef(false);
 
   const handleIntroDone = useCallback(() => setStep("cinema"), []);
-  const handleCinemaDone = useCallback(() => setStep("page"), []);
 
-  useEffect(() => {
-    document.body.style.overflow = step === "page" ? "" : "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, [step]);
-
-  // Écoute du CTA
   useEffect(() => {
     const handler = () => onBack();
     window.addEventListener("cta-click", handler);
@@ -857,26 +972,30 @@ export default function AboutPage({ onBack = () => {} }) {
     const fromIndex = current;
     const toIndex = targetIndex;
 
-    const duration = 950;
+    const duration = 820;
     const startTime = performance.now();
 
-    setFlip({ active: true, direction, progress: 0, fromIndex, toIndex });
+    setFlip({ active: true, direction, progress: 0, velocity: 0, fromIndex, toIndex });
+
+    let lastP = 0;
+    let lastT = startTime;
 
     const animate = (now) => {
       const elapsed = now - startTime;
       const raw = Math.min(elapsed / duration, 1);
+      const eased = paperEase(raw);
+      const dt = Math.max(1, now - lastT);
+      const velocity = Math.abs(eased - lastP) / dt * 16.7;
+      lastP = eased;
+      lastT = now;
 
-      const eased = raw < 0.5
-        ? 4 * raw * raw * raw
-        : 1 - Math.pow(-2 * raw + 2, 3) / 2;
-
-      setFlip((f) => ({ ...f, progress: eased }));
+      setFlip((f) => ({ ...f, progress: eased, velocity }));
 
       if (raw < 1) {
         flipRef.current = requestAnimationFrame(animate);
       } else {
         setCurrent(toIndex);
-        setFlip({ active: false, direction, progress: 0, fromIndex: toIndex, toIndex });
+        setFlip({ active: false, direction, progress: 0, velocity: 0, fromIndex: toIndex, toIndex });
         animatingRef.current = false;
       }
     };
@@ -889,7 +1008,62 @@ export default function AboutPage({ onBack = () => {} }) {
     };
   }, []);
 
-  const goNext = useCallback(() => startFlip(current + 1), [startFlip, current]);
+  const [coverFlip, setCoverFlip] = useState({ active: false, progress: 0, mode: null });
+  const coverRef = useRef(null);
+
+  const animateCover = useCallback((mode, duration, onDone) => {
+    if (coverRef.current) cancelAnimationFrame(coverRef.current);
+    const startTime = performance.now();
+    setCoverFlip({ active: true, progress: 0, mode });
+
+    const animate = (now) => {
+      const raw = Math.min((now - startTime) / duration, 1);
+      const eased = paperEase(raw);
+      setCoverFlip({ active: true, progress: eased, mode });
+      if (raw < 1) {
+        coverRef.current = requestAnimationFrame(animate);
+      } else {
+        setCoverFlip({ active: false, progress: 1, mode });
+        onDone && onDone();
+      }
+    };
+    coverRef.current = requestAnimationFrame(animate);
+  }, []);
+
+  const openBook = useCallback(() => {
+    if (step !== "cover") return;
+    setStep("opening");
+    animateCover("opening", 1150, () => setStep("page"));
+  }, [step, animateCover]);
+
+  const closeBook = useCallback(() => {
+    if (animatingRef.current) return;
+    setStep("closing");
+    animateCover("closing", 1150, () => setStep("end"));
+  }, [animateCover]);
+
+  useEffect(() => {
+    return () => {
+      if (coverRef.current) cancelAnimationFrame(coverRef.current);
+    };
+  }, []);
+
+  const handleCinemaDone = useCallback(() => setStep("cover"), []);
+
+  const showBook = step !== "intro" && step !== "cinema";
+
+  useEffect(() => {
+    document.body.style.overflow = (step === "intro" || step === "cinema") ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [step]);
+
+  const goNext = useCallback(() => {
+    if (current >= SLIDES.length - 1) {
+      closeBook();
+    } else {
+      startFlip(current + 1);
+    }
+  }, [startFlip, current, closeBook]);
   const goPrev = useCallback(() => startFlip(current - 1), [startFlip, current]);
   const goTo = useCallback((idx) => startFlip(idx), [startFlip]);
 
@@ -921,22 +1095,46 @@ export default function AboutPage({ onBack = () => {} }) {
     let overshoot = 0;
     if (p > 0.82) {
       const t = (p - 0.82) / 0.18;
-      overshoot = Math.sin(t * Math.PI) * 4;
+      overshoot = Math.sin(t * Math.PI) * 3;
     }
     const angle = (p * 180) + (isNext ? -overshoot : overshoot);
 
     const curl = Math.sin(p * Math.PI);
-    const skewY = curl * (isNext ? 4 : -4);
-    const scaleX = 1 - curl * 0.05;
-    const scaleY = 1 + curl * 0.01;
-    const shadowIntensity = curl;
-    const outgoingOpacity = p < 0.5 ? 1 : Math.max(0, 1 - (p - 0.5) / 0.45);
-    const incomingOpacity = Math.min(1, 0.3 + p * 1.4);
+    const curlAsym = Math.pow(Math.sin(p * Math.PI), 0.72);
 
-    return { isNext, angle, skewY, scaleX, scaleY, shadowIntensity, outgoingOpacity, incomingOpacity };
+    const skewY = curlAsym * (isNext ? 6.5 : -6.5);
+    const scaleX = 1 - curlAsym * 0.09;
+    const scaleY = 1 + curlAsym * 0.015;
+    const shadowIntensity = curl;
+
+    const lift = -curlAsym * 13;
+    const tiltX = Math.sin(p * Math.PI * 0.9) * (isNext ? 3.2 : -3.2);
+
+    const motionBlur = Math.min(1.1, (flip.velocity || 0) * 0.55);
+
+    const sheenPos = 15 + p * 70;
+
+    const outgoingOpacity = p < 0.55 ? 1 : Math.max(0, 1 - (p - 0.55) / 0.4);
+    const incomingOpacity = Math.min(1, 0.25 + p * 1.5);
+
+    return {
+      isNext, angle, skewY, scaleX, scaleY, shadowIntensity,
+      lift, tiltX, motionBlur, sheenPos,
+      outgoingOpacity, incomingOpacity
+    };
   };
 
   const flipData = computeFlip();
+
+  const showCoverPanel = step === "cover" || step === "opening" || step === "closing" || step === "end";
+  const panelVariant = (step === "closing" || step === "end") ? "end" : "start";
+  let panelAngle = 0;
+  if (step === "opening") panelAngle = -165 * coverFlip.progress;
+  else if (step === "closing") panelAngle = -165 * (1 - coverFlip.progress);
+  const panelOpenFrac = Math.min(1, Math.abs(panelAngle) / 165);
+  const panelCurl = Math.sin(panelOpenFrac * Math.PI);
+  const panelLive = step === "cover" || step === "end";
+  const panelAnimating = step === "opening" || step === "closing";
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-[#f4f2ec] via-[#eae7dd] to-[#e0dccd] text-gray-800 overflow-hidden" style={{ fontFamily: "Manrope, sans-serif" }}>
@@ -958,6 +1156,10 @@ export default function AboutPage({ onBack = () => {} }) {
         @keyframes fadeUp {
           0% { opacity: 0; transform: translateY(8px); }
           100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes sheenSweep {
+          0%, 100% { background-position: 0% 0%; }
+          50% { background-position: 100% 100%; }
         }
 
         .book-scene {
@@ -1077,27 +1279,30 @@ export default function AboutPage({ onBack = () => {} }) {
 
       <div
         style={{
-          opacity: step === "page" ? 1 : 0,
+          opacity: showBook ? 1 : 0,
           transition: "opacity 0.8s ease",
-          pointerEvents: step === "page" ? "auto" : "none"
+          pointerEvents: showBook ? "auto" : "none"
         }}
       >
-        {step === "page" && <PageBackground />}
+        {showBook && <PageBackground />}
 
         <div className="fixed top-0 left-0 right-0 z-40 h-[2px] bg-gray-200/50">
           <div
             className="h-full bg-[#c9a961]"
-            style={{ width: `${progressPct}%`, transition: "width 0.5s cubic-bezier(0.22,1,0.36,1)" }}
+            style={{
+              width: `${step === "page" ? progressPct : (panelVariant === "end" && (step === "closing" || step === "end") ? 100 : 0)}%`,
+              transition: "width 0.5s cubic-bezier(0.22,1,0.36,1)"
+            }}
           />
         </div>
 
-        <header className="relative z-20 px-6 md:px-12 pt-8 flex items-center justify-between">
+        <header className="relative z-20 px-6 md:px-12 pt-6 flex items-center justify-between">
           <button
             onClick={onBack}
             className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-black transition-colors cursor-pointer group"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-400/60 group-hover:border-black transition-colors bg-white/60 backdrop-blur-sm">
-              <ArrowLeft size={16} />
+            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-400/60 group-hover:border-black transition-colors bg-white/60 backdrop-blur-sm">
+              <ArrowLeft size={14} />
             </span>
             Retour à l'accueil
           </button>
@@ -1107,26 +1312,34 @@ export default function AboutPage({ onBack = () => {} }) {
           </p>
         </header>
 
-        <main className="relative z-10 px-4 md:px-8 pt-8 pb-32 min-h-[85vh] flex items-center justify-center">
+        <main className="relative z-10 px-4 md:px-8 pt-6 pb-28 min-h-[80vh] flex items-center justify-center">
           
-          <div className="relative w-full max-w-6xl book-scene">
+          <div
+            className="relative w-full max-w-3xl book-scene"
+            style={{
+              perspective: `${2800 - (flipData?.shadowIntensity || 0) * 550}px`,
+              transition: flip.active ? "none" : "perspective 0.3s ease"
+            }}
+          >
             
             <div
               className="relative mx-auto"
               style={{
                 width: "100%",
-                maxWidth: "1150px",
+                maxWidth: "720px",
                 aspectRatio: "16 / 10",
                 transformStyle: "preserve-3d"
               }}
             >
               <div
-                className="absolute -bottom-10 left-1/2 -translate-x-1/2 pointer-events-none"
+                className="absolute -bottom-8 left-1/2 -translate-x-1/2 pointer-events-none"
                 style={{
-                  width: "92%",
-                  height: "50px",
+                  width: `${92 + (flipData?.shadowIntensity || 0) * 4}%`,
+                  height: "40px",
                   background: "radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, transparent 70%)",
-                  filter: "blur(16px)",
+                  filter: `blur(${14 + (flipData?.shadowIntensity || 0) * 6}px)`,
+                  opacity: 1 - (flipData?.shadowIntensity || 0) * 0.25,
+                  transition: flip.active ? "none" : "all 0.3s ease",
                   zIndex: 0
                 }}
               />
@@ -1145,6 +1358,7 @@ export default function AboutPage({ onBack = () => {} }) {
                 style={{ top: "6px", bottom: "6px", right: "-6px", width: "12px", zIndex: 2 }}
               />
 
+              {/* CONTENEUR PRINCIPAL — pages du livre */}
               <div className="absolute inset-0" style={{ zIndex: 5, transformStyle: "preserve-3d" }}>
 
                 {/* PAGE DE GAUCHE */}
@@ -1160,8 +1374,8 @@ export default function AboutPage({ onBack = () => {} }) {
                   <div className="paper-veins rounded-l-md" />
                   <div className="paper-grain rounded-l-md" />
                   <div className="page-curl-inner-left" />
-                  <div className="relative h-full p-8 xl:p-12">
-                    <span className="absolute bottom-5 left-8 xl:left-12 text-[10px] tracking-widest text-gray-400 font-mono">
+                  <div className="relative h-full p-5 xl:p-6">
+                    <span className="absolute bottom-3 left-5 xl:left-6 text-[9px] tracking-widest text-gray-400 font-mono">
                       {String(current * 2 + 1).padStart(2, "0")}
                     </span>
                     <SlideContent slide={leftSlide} slideIndex={current} pageSide="left" />
@@ -1182,8 +1396,8 @@ export default function AboutPage({ onBack = () => {} }) {
                     <div className="paper-veins rounded-r-md" />
                     <div className="paper-grain rounded-r-md" />
                     <div className="page-curl-inner-right" />
-                    <div className="relative h-full p-8 xl:p-12">
-                      <span className="absolute bottom-5 right-8 xl:right-12 text-[10px] tracking-widest text-gray-400 font-mono">
+                    <div className="relative h-full p-5 xl:p-6">
+                      <span className="absolute bottom-3 right-5 xl:right-6 text-[9px] tracking-widest text-gray-400 font-mono">
                         {String(rightIndex * 2 + 2).padStart(2, "0")}
                       </span>
                       <SlideContent slide={rightSlide} slideIndex={rightIndex} pageSide="right" />
@@ -1212,8 +1426,8 @@ export default function AboutPage({ onBack = () => {} }) {
                         background: `linear-gradient(to right, rgba(0,0,0,${(flipData?.shadowIntensity || 0) * 0.35}) 0%, rgba(0,0,0,${(flipData?.shadowIntensity || 0) * 0.12}) 30%, transparent 70%)`
                       }}
                     />
-                    <div className="relative h-full p-8 xl:p-12">
-                      <span className="absolute bottom-5 right-8 xl:right-12 text-[10px] tracking-widest text-gray-400 font-mono">
+                    <div className="relative h-full p-5 xl:p-6">
+                      <span className="absolute bottom-3 right-5 xl:right-6 text-[9px] tracking-widest text-gray-400 font-mono">
                         {String(flip.toIndex * 2 + 2).padStart(2, "0")}
                       </span>
                       {SLIDES[flip.toIndex] && (
@@ -1244,8 +1458,8 @@ export default function AboutPage({ onBack = () => {} }) {
                         background: `linear-gradient(to left, rgba(0,0,0,${(flipData?.shadowIntensity || 0) * 0.35}) 0%, rgba(0,0,0,${(flipData?.shadowIntensity || 0) * 0.12}) 30%, transparent 70%)`
                       }}
                     />
-                    <div className="relative h-full p-8 xl:p-12">
-                      <span className="absolute bottom-5 left-8 xl:left-12 text-[10px] tracking-widest text-gray-400 font-mono">
+                    <div className="relative h-full p-5 xl:p-6">
+                      <span className="absolute bottom-3 left-5 xl:left-6 text-[9px] tracking-widest text-gray-400 font-mono">
                         {String(flip.toIndex * 2 + 1).padStart(2, "0")}
                       </span>
                       {SLIDES[flip.toIndex] && (
@@ -1264,13 +1478,16 @@ export default function AboutPage({ onBack = () => {} }) {
                       [flipData.isNext ? "right" : "left"]: 0,
                       transformOrigin: flipData.isNext ? "left center" : "right center",
                       transform: `
+                        translateY(${flipData.lift}px)
+                        translateZ(${flipData.shadowIntensity * 22}px)
                         rotateY(${flipData.angle}deg)
+                        rotateX(${flipData.tiltX}deg)
                         skewY(${flipData.skewY}deg)
                         scaleX(${flipData.scaleX})
                         scaleY(${flipData.scaleY})
-                        translateZ(${flipData.shadowIntensity * 15}px)
                       `,
                       opacity: flipData.outgoingOpacity,
+                      filter: flipData.motionBlur > 0.08 ? `blur(${flipData.motionBlur}px)` : "none",
                       zIndex: 20,
                       transformStyle: "preserve-3d"
                     }}
@@ -1292,22 +1509,40 @@ export default function AboutPage({ onBack = () => {} }) {
                         className="absolute inset-0 pointer-events-none z-20"
                         style={{
                           background: flipData.isNext
-                            ? `linear-gradient(to left, rgba(0,0,0,${flipData.shadowIntensity * 0.4}) 0%, rgba(0,0,0,${flipData.shadowIntensity * 0.15}) 25%, transparent 65%)`
-                            : `linear-gradient(to right, rgba(0,0,0,${flipData.shadowIntensity * 0.4}) 0%, rgba(0,0,0,${flipData.shadowIntensity * 0.15}) 25%, transparent 65%)`
+                            ? `linear-gradient(to left, rgba(0,0,0,${flipData.shadowIntensity * 0.42}) 0%, rgba(0,0,0,${flipData.shadowIntensity * 0.16}) 22%, transparent 60%)`
+                            : `linear-gradient(to right, rgba(0,0,0,${flipData.shadowIntensity * 0.42}) 0%, rgba(0,0,0,${flipData.shadowIntensity * 0.16}) 22%, transparent 60%)`
                         }}
                       />
                       <div
                         className="absolute inset-0 pointer-events-none z-20"
                         style={{
-                          background: `radial-gradient(ellipse at 50% 0%, rgba(255,255,255,${flipData.shadowIntensity * 0.6}) 0%, transparent 50%)`
+                          background: flipData.isNext
+                            ? `linear-gradient(to right,
+                                transparent 0%,
+                                rgba(255,255,255,${flipData.shadowIntensity * 0.55}) ${flipData.sheenPos - 10}%,
+                                rgba(255,255,255,${flipData.shadowIntensity * 0.85}) ${flipData.sheenPos}%,
+                                rgba(255,255,255,${flipData.shadowIntensity * 0.55}) ${flipData.sheenPos + 10}%,
+                                transparent 100%)`
+                            : `linear-gradient(to left,
+                                transparent 0%,
+                                rgba(255,255,255,${flipData.shadowIntensity * 0.55}) ${flipData.sheenPos - 10}%,
+                                rgba(255,255,255,${flipData.shadowIntensity * 0.85}) ${flipData.sheenPos}%,
+                                rgba(255,255,255,${flipData.shadowIntensity * 0.55}) ${flipData.sheenPos + 10}%,
+                                transparent 100%)`
+                        }}
+                      />
+                      <div
+                        className="absolute inset-0 pointer-events-none z-20"
+                        style={{
+                          background: `radial-gradient(ellipse at 50% 0%, rgba(255,255,255,${flipData.shadowIntensity * 0.5}) 0%, transparent 50%)`
                         }}
                       />
                       <div className="paper-veins" />
                       <div className="paper-grain" />
-                      <div className="relative h-full p-8 xl:p-12">
+                      <div className="relative h-full p-5 xl:p-6">
                         {flipData.isNext ? (
                           <>
-                            <span className="absolute bottom-5 right-8 xl:right-12 text-[10px] tracking-widest text-gray-400 font-mono">
+                            <span className="absolute bottom-3 right-5 xl:right-6 text-[9px] tracking-widest text-gray-400 font-mono">
                               {String(flip.fromIndex * 2 + 2).padStart(2, "0")}
                             </span>
                             {SLIDES[flip.fromIndex + 1] && (
@@ -1320,7 +1555,7 @@ export default function AboutPage({ onBack = () => {} }) {
                           </>
                         ) : (
                           <>
-                            <span className="absolute bottom-5 left-8 xl:left-12 text-[10px] tracking-widest text-gray-400 font-mono">
+                            <span className="absolute bottom-3 left-5 xl:left-6 text-[9px] tracking-widest text-gray-400 font-mono">
                               {String(flip.fromIndex * 2 + 1).padStart(2, "0")}
                             </span>
                             {SLIDES[flip.fromIndex] && (
@@ -1358,10 +1593,10 @@ export default function AboutPage({ onBack = () => {} }) {
                           background: `radial-gradient(ellipse at ${flipData.isNext ? "right" : "left"} center, rgba(0,0,0,0.08) 0%, transparent 60%)`
                         }}
                       />
-                      <div className="relative h-full p-8 xl:p-12">
+                      <div className="relative h-full p-5 xl:p-6">
                         {flipData.isNext ? (
                           <>
-                            <span className="absolute bottom-5 left-8 xl:left-12 text-[10px] tracking-widest text-gray-400 font-mono">
+                            <span className="absolute bottom-3 left-5 xl:left-6 text-[9px] tracking-widest text-gray-400 font-mono">
                               {String(flip.toIndex * 2 + 1).padStart(2, "0")}
                             </span>
                             {SLIDES[flip.toIndex] && (
@@ -1374,7 +1609,7 @@ export default function AboutPage({ onBack = () => {} }) {
                           </>
                         ) : (
                           <>
-                            <span className="absolute bottom-5 right-8 xl:right-12 text-[10px] tracking-widest text-gray-400 font-mono">
+                            <span className="absolute bottom-3 right-5 xl:right-6 text-[9px] tracking-widest text-gray-400 font-mono">
                               {String(flip.toIndex * 2 + 2).padStart(2, "0")}
                             </span>
                             {SLIDES[flip.toIndex + 1] && (
@@ -1390,6 +1625,60 @@ export default function AboutPage({ onBack = () => {} }) {
                     </div>
                   </div>
                 )}
+
+                {/* COUVERTURE — placée DANS le conteneur principal pour rester
+                    exactement à la même taille que le livre */}
+                {showCoverPanel && (
+                  <div
+                    className="absolute inset-0 book-page"
+                    style={{
+                      transformOrigin: "left center",
+                      transform: `
+                        rotateY(${panelAngle}deg)
+                        skewY(${panelCurl * 3}deg)
+                        scaleX(${1 - panelCurl * 0.035})
+                        translateZ(${panelCurl * 18}px)
+                      `,
+                      pointerEvents: panelAnimating ? "none" : "auto",
+                      zIndex: 40
+                    }}
+                  >
+                    {/* Face avant */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
+                        boxShadow: `0 ${10 + panelCurl * 30}px ${40 + panelCurl * 40}px rgba(0,0,0,${0.3 + panelCurl * 0.2})`
+                      }}
+                    >
+                      <CoverFace
+                        variant={panelVariant}
+                        live={panelLive}
+                        onAction={panelVariant === "start" ? openBook : undefined}
+                      />
+                    </div>
+
+                    {/* Face arrière */}
+                    <div
+                      className="absolute inset-0 overflow-hidden rounded-lg"
+                      style={{
+                        backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
+                        transform: "rotateY(180deg)",
+                        background: "linear-gradient(135deg, #f8f6f0 0%, #efece2 100%)"
+                      }}
+                    >
+                      <div
+                        className="absolute inset-0 opacity-50"
+                        style={{
+                          backgroundImage: "repeating-linear-gradient(60deg, transparent, transparent 12px, rgba(201,169,97,0.05) 12px, rgba(201,169,97,0.05) 13px)"
+                        }}
+                      />
+                      <div className="absolute inset-[14px] border border-[#c9a961]/25 rounded-sm" />
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="book-spine" />
@@ -1398,7 +1687,7 @@ export default function AboutPage({ onBack = () => {} }) {
 
             {flip.active && (
               <div
-                className="absolute -bottom-16 left-1/2 -translate-x-1/2 flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-[#c9a961]"
+                className="absolute -bottom-14 left-1/2 -translate-x-1/2 flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-[#c9a961]"
                 style={{ animation: "fadeUp 0.35s ease both" }}
               >
                 {flip.direction === "next" ? (
@@ -1417,18 +1706,19 @@ export default function AboutPage({ onBack = () => {} }) {
           </div>
         </main>
 
+        {step === "page" && (
         <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/70 backdrop-blur-xl border-t border-gray-300/50">
-          <div className="max-w-6xl mx-auto px-6 md:px-12 py-5 flex items-center justify-between gap-6">
+          <div className="max-w-3xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
 
             <button
               onClick={goPrev}
               disabled={isFirst || isAnimating}
-              className={`inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest transition-all cursor-pointer group ${
+              className={`inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer group ${
                 isFirst || isAnimating ? "text-gray-300 cursor-not-allowed" : "text-gray-700 hover:text-black"
               }`}
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-400/60 group-hover:border-black transition-colors bg-white/70">
-                <ArrowLeft size={14} />
+              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-gray-400/60 group-hover:border-black transition-colors bg-white/70">
+                <ArrowLeft size={12} />
               </span>
               Page précédente
             </button>
@@ -1458,25 +1748,26 @@ export default function AboutPage({ onBack = () => {} }) {
               <button
                 onClick={goNext}
                 disabled={isAnimating}
-                className={`inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest transition-all cursor-pointer group ${
+                className={`inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer group ${
                   isAnimating ? "text-gray-300 cursor-not-allowed" : "text-gray-700 hover:text-black"
                 }`}
               >
                 Page suivante
-                <span className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-400/60 group-hover:border-black transition-colors bg-white/70">
-                  <ArrowRight size={14} />
+                <span className="flex h-7 w-7 items-center justify-center rounded-full border border-gray-400/60 group-hover:border-black transition-colors bg-white/70">
+                  <ArrowRight size={12} />
                 </span>
               </button>
             ) : (
               <button
-                onClick={onBack}
-                className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 text-xs font-black uppercase tracking-widest hover:bg-[#c9a961] hover:text-black transition-all duration-300 cursor-pointer"
+                onClick={closeBook}
+                className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 text-[10px] font-black uppercase tracking-widest hover:bg-[#c9a961] hover:text-black transition-all duration-300 cursor-pointer"
               >
-                Commencer mon projet <ArrowUpRight size={14} />
+                Refermer le livre <BookOpen size={12} />
               </button>
             )}
           </div>
         </div>
+        )}
       </div>
     </div>
   );
