@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
-import { ArrowRight, ArrowLeft, Lightbulb, Target, BarChart3, Building2, Check, Sparkles, X, Send, Calendar, User, Mail, Phone, MessageSquare } from 'lucide-react';
-
-const RESERVATION_EMAIL = "ranaivosonmurielle18@gmail.com";
+import { ArrowRight, ArrowLeft, Lightbulb, Target, BarChart3, Building2, Check, Sparkles } from 'lucide-react';
 
 const services = [
   {
@@ -83,219 +81,8 @@ const AnimatedText = ({ text, className }) => {
   );
 };
 
-/* ---------- MODAL DE RÉSERVATION ---------- */
-function ReservationModal({ service, onClose }) {
-  const [form, setForm] = useState({
-    nom: "",
-    email: "",
-    telephone: "",
-    date: "",
-    message: ""
-  });
-  const [status, setStatus] = useState("idle"); // idle | sending | success | error
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus("sending");
-
-    try {
-      const res = await fetch(`https://formsubmit.co/ajax/${RESERVATION_EMAIL}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        },
-        body: JSON.stringify({
-          _subject: `Nouvelle réservation — ${service.title}`,
-          _template: "table",
-          _captcha: "false",
-          Service: service.title,
-          Tarif: service.price,
-          Délai: service.duration,
-          Nom: form.nom,
-          Email: form.email,
-          Téléphone: form.telephone,
-          "Date souhaitée": form.date,
-          Message: form.message
-        })
-      });
-
-      if (res.ok) {
-        setStatus("success");
-        setTimeout(() => onClose(), 2500);
-      } else {
-        setStatus("error");
-      }
-    } catch (err) {
-      setStatus("error");
-    }
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.96 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 20, scale: 0.96 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-3xl bg-white shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="relative bg-black text-white p-8 rounded-t-3xl overflow-hidden">
-          <div className="pointer-events-none absolute -top-20 -right-20 w-[300px] h-[300px] rounded-full bg-[#c9a961]/30 blur-[80px]" />
-          <button
-            onClick={onClose}
-            className="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors cursor-pointer"
-          >
-            <X size={18} />
-          </button>
-
-          <p className="relative text-[10px] font-black uppercase tracking-[0.3em] text-[#c9a961] mb-2">
-            Réservation
-          </p>
-          <h3 className="relative text-2xl md:text-3xl font-black uppercase leading-tight">
-            {service.title}
-          </h3>
-          <div className="relative flex items-center gap-4 mt-4 text-sm">
-            <span className="px-3 py-1 rounded-full bg-[#c9a961] text-black font-bold text-xs">
-              {service.price}
-            </span>
-            <span className="text-white/60 text-xs">Délai : {service.duration}</span>
-          </div>
-        </div>
-
-        {/* Form */}
-        {status === "success" ? (
-          <div className="p-10 text-center">
-            <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center mb-4">
-              <Check className="w-8 h-8 text-green-600" />
-            </div>
-            <h4 className="text-xl font-black uppercase mb-2">Demande envoyée !</h4>
-            <p className="text-sm text-gray-500">
-              Nous vous contacterons très bientôt à l'adresse {form.email}.
-            </p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="p-8 space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
-                <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-gray-500 mb-2">
-                  <User size={13} /> Nom complet *
-                </label>
-                <input
-                  type="text"
-                  name="nom"
-                  required
-                  value={form.nom}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#c9a961] focus:ring-2 focus:ring-[#c9a961]/20 outline-none transition-all text-sm"
-                  placeholder="Votre nom"
-                />
-              </div>
-
-              <div>
-                <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-gray-500 mb-2">
-                  <Mail size={13} /> Email *
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  value={form.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#c9a961] focus:ring-2 focus:ring-[#c9a961]/20 outline-none transition-all text-sm"
-                  placeholder="vous@exemple.com"
-                />
-              </div>
-
-              <div>
-                <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-gray-500 mb-2">
-                  <Phone size={13} /> Téléphone
-                </label>
-                <input
-                  type="tel"
-                  name="telephone"
-                  value={form.telephone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#c9a961] focus:ring-2 focus:ring-[#c9a961]/20 outline-none transition-all text-sm"
-                  placeholder="+261 ..."
-                />
-              </div>
-
-              <div>
-                <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-gray-500 mb-2">
-                  <Calendar size={13} /> Date souhaitée *
-                </label>
-                <input
-                  type="date"
-                  name="date"
-                  required
-                  value={form.date}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#c9a961] focus:ring-2 focus:ring-[#c9a961]/20 outline-none transition-all text-sm"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-gray-500 mb-2">
-                <MessageSquare size={13} /> Message (optionnel)
-              </label>
-              <textarea
-                name="message"
-                rows={4}
-                value={form.message}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#c9a961] focus:ring-2 focus:ring-[#c9a961]/20 outline-none transition-all text-sm resize-none"
-                placeholder="Décrivez brièvement votre projet..."
-              />
-            </div>
-
-            {status === "error" && (
-              <p className="text-sm text-red-500 bg-red-50 px-4 py-3 rounded-xl">
-                Une erreur est survenue. Veuillez réessayer ou nous écrire directement à {RESERVATION_EMAIL}.
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="w-full inline-flex items-center justify-center gap-3 bg-[#c9a961] hover:bg-[#b8954a] disabled:opacity-60 text-black px-8 py-4 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 cursor-pointer"
-            >
-              {status === "sending" ? (
-                "Envoi en cours..."
-              ) : (
-                <>
-                  Envoyer la réservation
-                  <Send className="w-4 h-4" />
-                </>
-              )}
-            </button>
-
-            <p className="text-[10px] text-center text-gray-400 leading-relaxed">
-              Votre demande sera envoyée à <span className="font-bold">{RESERVATION_EMAIL}</span>
-            </p>
-          </form>
-        )}
-      </motion.div>
-    </motion.div>
-  );
-}
-
-export default function ServicesPage({ onBack, onGoToProcess, initialService = 0 }) {
+export default function ServicesPage({ onBack, onGoToProcess, onReserve, initialService = 0 }) {
   const [activeService, setActiveService] = useState(initialService);
-  const [reserveService, setReserveService] = useState(null);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
@@ -305,13 +92,6 @@ export default function ServicesPage({ onBack, onGoToProcess, initialService = 0
   const opacityHeader = useTransform(headerScroll, [0, 0.8], [1, 0]);
 
   const service = services[activeService];
-
-  // Bloque le scroll du body quand le modal est ouvert
-  useEffect(() => {
-    if (reserveService) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "";
-    return () => { document.body.style.overflow = ""; };
-  }, [reserveService]);
 
   return (
     <div className="min-h-screen bg-white font-sans text-gray-800 selection:bg-[#c9a961] selection:text-white overflow-x-hidden">
@@ -546,7 +326,7 @@ export default function ServicesPage({ onBack, onGoToProcess, initialService = 0
                     </ul>
 
                     <button
-                      onClick={() => setReserveService(service)}
+                      onClick={() => onReserve(service)}
                       className="group inline-flex items-center gap-3 bg-[#c9a961] hover:bg-[#b8954a] text-black px-8 py-4 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 cursor-pointer"
                     >
                       Réserver ce service — {service.price}
@@ -566,16 +346,6 @@ export default function ServicesPage({ onBack, onGoToProcess, initialService = 0
           <span>Tous droits réservés</span>
         </div>
       </footer>
-
-      {/* MODAL DE RÉSERVATION */}
-      <AnimatePresence>
-        {reserveService && (
-          <ReservationModal
-            service={reserveService}
-            onClose={() => setReserveService(null)}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 }
