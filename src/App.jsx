@@ -963,18 +963,40 @@ const HomePage = () => {
               <p className="text-sm text-gray-500 mt-1">{reserveService.models[1].name} — {reserveService.models[1].price}</p>
             </div>
 
-            <form onSubmit={(e) => {
+            <form onSubmit={async (e) => {
               e.preventDefault();
               const form = e.target;
-              const nom = form.elements.Nom.value;
-              const date = form.elements.Date.value;
-              const service = reserveService.title;
-              const formule = `${reserveService.models[1].name} — ${reserveService.models[1].price}`;
-              const subject = encodeURIComponent(`Réservation - ${service}`);
-              const body = encodeURIComponent(
-                `Bonjour,\n\nJe souhaite réserver ce service :\n\nNom : ${nom}\nService : ${service}\nFormule : ${formule}\nDate souhaitée : ${date}\n\nMerci.`
-              );
-              window.location.href = `mailto:ranaivosonmurielle18@gmail.com?subject=${subject}&body=${body}`;
+              const btn = form.querySelector('button[type="submit"]');
+              btn.disabled = true;
+              btn.textContent = 'Envoi...';
+
+              try {
+                const res = await fetch('https://formsubmit.co/ajax/ranaivosonmurielle18@gmail.com', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                  body: JSON.stringify({
+                    _subject: `Réservation — ${reserveService.title}`,
+                    _captcha: 'false',
+                    Nom: form.elements.Nom.value,
+                    Service: reserveService.title,
+                    Formule: `${reserveService.models[1].name} — ${reserveService.models[1].price}`,
+                    'Date souhaitée': form.elements.Date.value,
+                  })
+                });
+
+                if (res.ok) {
+                  btn.textContent = 'Envoyé !';
+                  btn.classList.remove('bg-[#c9a961]', 'hover:bg-[#b8954a]');
+                  btn.classList.add('bg-green-500');
+                  setTimeout(() => setReserveService(null), 1500);
+                } else {
+                  btn.textContent = 'Erreur, réessayez';
+                  btn.disabled = false;
+                }
+              } catch {
+                btn.textContent = 'Erreur, réessayez';
+                btn.disabled = false;
+              }
             }}>
               <div className="mb-5">
                 <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Votre nom *</label>
