@@ -669,7 +669,7 @@ const HomePage = () => {
 
               <p className="text-amber-200/90 text-[10px] sm:text-xs md:text-sm mb-3 sm:mb-4 tracking-[0.3em] sm:tracking-[0.4em] uppercase font-semibold"
                 style={{ textShadow: '0 2px 20px rgba(255, 200, 120, 0.5)' }}>
-                Service d'accompagnement à la création d'entreprise
+                Service d'<span className="text-[#c9a961] font-black text-xl md:text-2xl" style={{ textShadow: '0 0 20px rgba(201,169,97,0.9)' }}>A</span>ccompagnement à la <span className="text-[#c9a961] font-black text-xl md:text-2xl" style={{ textShadow: '0 0 20px rgba(201,169,97,0.9)' }}>C</span>réation d'<span className="text-[#c9a961] font-black text-xl md:text-2xl" style={{ textShadow: '0 0 20px rgba(201,169,97,0.9)' }}>E</span>ntreprise
               </p>
 
               <h1
