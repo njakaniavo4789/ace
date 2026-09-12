@@ -123,15 +123,15 @@ export default function ServicesPage({ onBack, onGoToProcess, onReserve, initial
         className="relative max-w-7xl mx-auto px-6 pt-16 md:pt-24 pb-20 text-center"
       >
         <AnimatedText
-          text="Services que nous offrons."
-          className="text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tight max-w-5xl mx-auto"
+          text="Nos services"
+          className="text-3xl md:text-5xl lg:text-6xl font-black uppercase leading-[0.9] tracking-tight max-w-5xl mx-auto"
         />
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.7 }}
-          className="text-base md:text-lg text-gray-500 leading-relaxed max-w-2xl mx-auto mt-8"
+          className="text-sm md:text-base text-gray-500 leading-relaxed max-w-2xl mx-auto mt-8"
         >
           De l'idée à la création, nous vous accompagnons à chaque étape. Évaluez votre projet, comprenez votre marché, préparez son financement et accomplissez les démarches de création.
         </motion.p>
@@ -223,7 +223,7 @@ export default function ServicesPage({ onBack, onGoToProcess, onReserve, initial
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.7 }}
-                  className="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[0.95] tracking-tight mb-6"
+                   className="text-2xl md:text-3xl lg:text-4xl font-black uppercase leading-[0.95] tracking-tight mb-6"
                 >
                   {service.title}
                 </motion.h2>
@@ -232,7 +232,7 @@ export default function ServicesPage({ onBack, onGoToProcess, onReserve, initial
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-xl mb-8"
+                   className="text-sm md:text-base text-gray-600 leading-relaxed max-w-xl mb-8"
                 >
                   {service.description}
                 </motion.p>
@@ -285,7 +285,7 @@ export default function ServicesPage({ onBack, onGoToProcess, onReserve, initial
                       </p>
 
                       <div className="flex items-end gap-3 mb-2">
-                        <span className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-none">
+                        <span className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-none">
                           {service.price}
                         </span>
                       </div>

@@ -181,7 +181,7 @@ export default function ProcessPage({ onBack, onGoToService, initialStep = 0 }) 
         <div className="relative">
           <AnimatedText
             text="Nos services, étape par étape."
-            className="text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tight max-w-5xl"
+            className="text-3xl md:text-5xl lg:text-6xl font-black uppercase leading-[0.9] tracking-tight max-w-5xl"
           />
         </div>
       </motion.header>
@@ -238,7 +238,7 @@ export default function ProcessPage({ onBack, onGoToService, initialStep = 0 }) 
 
                 <div className="mb-8">
                   <p className="text-xs font-bold uppercase tracking-widest opacity-60 mb-3">{currentService.period}</p>
-                  <h2 className="text-3xl md:text-4xl font-black uppercase leading-tight mb-4">
+                   <h2 className="text-xl md:text-2xl font-black uppercase leading-tight mb-4">
                     {currentService.title}
                   </h2>
                   <p className="text-base md:text-lg opacity-80 font-medium leading-relaxed">

@@ -669,7 +669,7 @@ const HomePage = () => {
 
               <p className="text-amber-200/90 text-[10px] sm:text-xs md:text-sm mb-3 sm:mb-4 tracking-[0.3em] sm:tracking-[0.4em] uppercase font-semibold"
                 style={{ textShadow: '0 2px 20px rgba(255, 200, 120, 0.5)' }}>
-                Excellence & Partenariat
+                Service d'accompagnement à la création d'entreprise
               </p>
 
               <h1
@@ -968,7 +968,6 @@ function ReservationModalInner({ svc, onClose }) {
           _captcha: 'false',
           Nom: nom,
           Service: svc.title,
-          Formule: `${svc.models[1].name} — ${svc.models[1].price}`,
           'Date souhaitée': date,
         })
       });
@@ -1001,7 +1000,7 @@ function ReservationModalInner({ svc, onClose }) {
         <div className="mb-6">
           <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#c9a961] mb-2">Réservation</p>
           <h3 className="text-2xl font-black text-gray-900">{svc.title}</h3>
-          <p className="text-sm text-gray-500 mt-1">{svc.models[1].name} — {svc.models[1].price}</p>
+          <p className="text-sm text-gray-500 mt-1">{svc.price} — Délai : {svc.duration}</p>
         </div>
 
         {status === 'success' ? (
