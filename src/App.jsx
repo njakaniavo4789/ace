@@ -944,93 +944,117 @@ const HomePage = () => {
 
       {/* MODAL RÉSERVATION */}
       {reserveService && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" onClick={() => setReserveService(null)}>
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-md" />
-          <div
-            className="relative w-full max-w-md bg-white rounded-3xl p-8 sm:p-10 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setReserveService(null)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-100 transition-all cursor-pointer"
-            >
-              ✕
-            </button>
-
-            <div className="mb-6">
-              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#c9a961] mb-2">Réservation</p>
-              <h3 className="text-2xl font-black text-gray-900">{reserveService.title}</h3>
-              <p className="text-sm text-gray-500 mt-1">{reserveService.models[1].name} — {reserveService.models[1].price}</p>
-            </div>
-
-            <form onSubmit={async (e) => {
-              e.preventDefault();
-              const form = e.target;
-              const btn = form.querySelector('button[type="submit"]');
-              btn.disabled = true;
-              btn.textContent = 'Envoi...';
-
-              try {
-                const res = await fetch('https://formsubmit.co/ajax/ranaivosonmurielle18@gmail.com', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                  body: JSON.stringify({
-                    _subject: `Réservation — ${reserveService.title}`,
-                    _captcha: 'false',
-                    Nom: form.elements.Nom.value,
-                    Service: reserveService.title,
-                    Formule: `${reserveService.models[1].name} — ${reserveService.models[1].price}`,
-                    'Date souhaitée': form.elements.Date.value,
-                  })
-                });
-
-                if (res.ok) {
-                  btn.textContent = 'Envoyé !';
-                  btn.classList.remove('bg-[#c9a961]', 'hover:bg-[#b8954a]');
-                  btn.classList.add('bg-green-500');
-                  setTimeout(() => setReserveService(null), 1500);
-                } else {
-                  btn.textContent = 'Erreur, réessayez';
-                  btn.disabled = false;
-                }
-              } catch {
-                btn.textContent = 'Erreur, réessayez';
-                btn.disabled = false;
-              }
-            }}>
-              <div className="mb-5">
-                <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Votre nom *</label>
-                <input
-                  type="text"
-                  name="Nom"
-                  required
-                  placeholder="Ex: Jean Dupont"
-                  className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 text-sm font-medium placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c9a961]/50 focus:border-[#c9a961] transition-all"
-                />
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Date souhaitée *</label>
-                <input
-                  type="date"
-                  name="Date"
-                  required
-                  className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#c9a961]/50 focus:border-[#c9a961] transition-all"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-[#c9a961] hover:bg-[#b8954a] text-white py-4 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 cursor-pointer"
-              >
-                Réserver maintenant
-              </button>
-            </form>
-          </div>
-        </div>
+        <ReservationModalInner svc={reserveService} onClose={() => setReserveService(null)} />
       )}
     </div>
   );
 };
+
+function ReservationModalInner({ svc, onClose }) {
+  const [nom, setNom] = useState('');
+  const [date, setDate] = useState('');
+  const [status, setStatus] = useState('idle');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('sending');
+
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/ranaivosonmurielle18@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `Réservation — ${svc.title}`,
+          _captcha: 'false',
+          Nom: nom,
+          Service: svc.title,
+          Formule: `${svc.models[1].name} — ${svc.models[1].price}`,
+          'Date souhaitée': date,
+        })
+      });
+
+      if (res.ok) {
+        setStatus('success');
+        setTimeout(onClose, 1500);
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-md" />
+      <div
+        className="relative w-full max-w-md bg-white rounded-3xl p-8 sm:p-10 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-100 transition-all cursor-pointer"
+        >
+          ✕
+        </button>
+
+        <div className="mb-6">
+          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#c9a961] mb-2">Réservation</p>
+          <h3 className="text-2xl font-black text-gray-900">{svc.title}</h3>
+          <p className="text-sm text-gray-500 mt-1">{svc.models[1].name} — {svc.models[1].price}</p>
+        </div>
+
+        {status === 'success' ? (
+          <div className="text-center py-8">
+            <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center mb-4">
+              <Check className="w-8 h-8 text-green-600" />
+            </div>
+            <h4 className="text-xl font-black uppercase mb-2">Envoyé !</h4>
+            <p className="text-sm text-gray-500">Votre réservation a bien été envoyée.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div className="mb-5">
+              <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Votre nom *</label>
+              <input
+                type="text"
+                required
+                value={nom}
+                onChange={(e) => setNom(e.target.value)}
+                placeholder="Ex: Jean Dupont"
+                className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 text-sm font-medium placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c9a961]/50 focus:border-[#c9a961] transition-all"
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Date souhaitée *</label>
+              <input
+                type="date"
+                required
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#c9a961]/50 focus:border-[#c9a961] transition-all"
+              />
+            </div>
+
+            {status === 'error' && (
+              <p className="text-sm text-red-500 bg-red-50 px-4 py-3 rounded-xl mb-4">
+                Une erreur est survenue. Réessayez.
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              className="w-full bg-[#c9a961] hover:bg-[#b8954a] disabled:opacity-60 text-white py-4 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 cursor-pointer"
+            >
+              {status === 'sending' ? 'Envoi...' : 'Réserver maintenant'}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default HomePage;
