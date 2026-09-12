@@ -974,7 +974,7 @@ const HomePage = () => {
               const body = encodeURIComponent(
                 `Bonjour,\n\nJe souhaite réserver ce service :\n\nNom : ${nom}\nService : ${service}\nFormule : ${formule}\nDate souhaitée : ${date}\n\nMerci.`
               );
-              window.location.href = `mailto:njakaniavo5@gmail.com?subject=${subject}&body=${body}`;
+              window.location.href = `mailto:ranaivosonmurielle18@gmail.com?subject=${subject}&body=${body}`;
             }}>
               <div className="mb-5">
                 <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Votre nom *</label>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
 import { ArrowRight, ArrowLeft, Lightbulb, Target, BarChart3, Building2, Check, Sparkles, X, Send, Calendar, User, Mail, Phone, MessageSquare } from 'lucide-react';
 
-const RESERVATION_EMAIL = "njakaniavo5@gmail.com";
+const RESERVATION_EMAIL = "ranaivosonmurielle18@gmail.com";
 
 const services = [
   {
